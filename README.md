@@ -19,7 +19,7 @@ Pod třemi tlačítky jsou vypsány celkové počty buněk v jednotlivých exper
 #### Interakční tlačítka
 Sloupeček 4 tlačítek **FLUSH**, **KILL ALL**, **COPY**, **MODE: ---** slouží k základní interakci s experimentem.
 * ##### FLUSH
-  Po stisknutí (levým tlačítkem myši) smaže pozorovaný experiment a změní se na tlačítko CREATE.
+  Po stisknutí (levým tlačítkem myši) smaže pozorovaný experiment a změní se na tlačítko **CREATE**.
 * ##### CREATE
   Po stisknutí vytvoří nový experiment s náhodnými buňkami. Experiment lze nastavit v části okna Počáteční nastavení.
 * ##### KILL ALL
