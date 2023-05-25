@@ -10,7 +10,7 @@ Alternativně lze program spustit příkazem `python Petri_dish_simulation.py`.
 Popis jednotlivých částí okna zleva doprava, shora dolů.
 #### Petriho miska
 Levá polovina okna zobrazuje petriho misku a buňky v ní. Umožňuje interakci s konkrétními buňkami.
-Kliknutím levým tlačítkem myši na buňku se buňka označí, bude zvýrazněná a lze ji dočasně uložit (více v Interakční tlačítka) a zvlášť pozorovat (více v Informace o buňkách).
+Kliknutím levým tlačítkem myši na buňku se buňka označí, bude zvýrazněná a lze ji dočasně uložit (více v **Interakční tlačítka**) a zvlášť pozorovat (více v **Informace o buňkách**).
 Kliknutím pravým tlačítkem myši lze na dané políčko vložit uloženou buňku, nebo smazat z daného políčka buňku (více v Interakční tlačítka).
 #### Experimenty
 Pomocí tří tlačítek s nápisy **EXPERIMENT 1**, **EXPERIMENT 2**, **EXPERIMENT 3** lze přepínat mezi pozorovanými experimentry v Petriho miskách.
@@ -21,7 +21,7 @@ Sloupeček 4 tlačítek **FLUSH**, **KILL ALL**, **COPY**, **MODE: ---** slouž�
 * ##### FLUSH
   Po stisknutí (levým tlačítkem myši) smaže pozorovaný experiment a změní se na tlačítko **CREATE**.
 * ##### CREATE
-  Po stisknutí vytvoří nový experiment s náhodnými buňkami. Experiment lze nastavit v části okna Počáteční nastavení.
+  Po stisknutí vytvoří nový experiment s náhodnými buňkami. Experiment lze nastavit v části okna **Počáteční nastavení**.
 * ##### KILL ALL
   Po stisknutí všechny buňky v pozorovaném experimentu zahynou.
 * ##### COPY
