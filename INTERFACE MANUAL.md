@@ -7,17 +7,20 @@ Pomocí tří tlačítek s nápisy **EXPERIMENT 1**, **EXPERIMENT 2**, **EXPERIM
 ## Interakční tlačítka
 Sloupeček 4 tlačítek **FLUSH**, **KILL ALL**, **COPY**, **MODE: ---** slouží k základní interakci s experimentem.
 * ### FLUSH
-Po stisknutí (levým tlačítkem myši) smaže pozorovaný experiment a změní se na tlačítko **CREATE**.
+  Po stisknutí (levým tlačítkem myši) smaže pozorovaný experiment a změní se na tlačítko **CREATE**.
 * ### CREATE
-Po stisknutí vytvoří nový experiment s náhodnými buňkami. Experiment lze nastavit v části okna **Počáteční nastavení**.
+  Po stisknutí vytvoří nový experiment s náhodnými buňkami. Experiment lze nastavit v části okna **Počáteční nastavení**.
 * ### KILL ALL
-Po stisknutí všechny buňky v pozorovaném experimentu zahynou.
+  Po stisknutí všechny buňky v pozorovaném experimentu zahynou.
 * ### COPY
-Po sisknutí dočasně uloží (aktuálně jen po dobu běhu programu) označenou buňku. Aktuálně lze mít uloženou nejvýše jednu buňku.
+  Po sisknutí dočasně uloží (aktuálně jen po dobu běhu programu) označenou buňku. Aktuálně lze mít uloženou nejvýše jednu buňku.
 * ### MODE: ---
-Po stisknutí změní funkci pravého tlačítka myši. Pokud je **MODE: PASTE**, tak pravé tlačítko myši vloží dočasně uloženou buňku na políčko v petriho misce na       kterém je kurzor. Pokud je **MODE: KILL**, tak pravé tlačítko myši smaže buňku z políčka v petriho misce na kterém je kurzor. 
-## Počáteční nastavení / Statistiky, rychlost simulace
-Pravá horní část okna je vymezená pro dvě části rozhraní. Tabulka **Počáteční nastavení** je zobrazená, pokud není zvolený experiment vytvořený. Tabulka **Statistiky, rychlost simulace** je zobrazená, pokud je daný experiment vytvořený.
-* ### Počáteční nastavení
+  Po stisknutí změní funkci pravého tlačítka myši. Pokud je **MODE: PASTE**, tak pravé tlačítko myši vloží dočasně uloženou buňku na políčko v petriho misce na         kterém je kurzor. Pokud je **MODE: KILL**, tak pravé tlačítko myši smaže buňku z políčka v petriho misce na kterém je kurzor. 
+## Statistiky, rychlost simulace / Počáteční nastavení
+Pravá horní část okna je vymezená pro dvě části rozhraní. Tabulka **Statistiky, rychlost simulace** je zobrazená, pokud je daný experiment vytvořený. Tabulka **Počáteční nastavení** je zobrazená, pokud není zvolený experiment vytvořený.
+### Statistiky, rychlost simulace
+Tabulka obsahuje 2 posuvníky **KILL CELL PERCENTAGE**, **SIMULATION SPEED** a sloupeček s tlačítkem **PAUSE** a 6 cedulek se statistikami **MIDAGE**, **MEDAGE**, **MAXAGE**, **MAXCLUS**, **MIDCLUS**, **DURATION**
 
+### Počáteční nastavení
+Tabulka obsahuje 4 posuvníky **
 
