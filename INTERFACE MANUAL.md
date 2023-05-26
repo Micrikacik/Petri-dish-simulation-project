@@ -15,10 +15,10 @@ Sloupeček 4 tlačítek **FLUSH**, **KILL ALL**, **COPY**, **MODE: ---** slouž�
 Pravá horní část okna je vymezená pro dvě části rozhraní. Tabulka **Statistiky, rychlost simulace** je zobrazená, pokud je daný experiment vytvořený. Tabulka **Počáteční nastavení** je zobrazená, pokud není zvolený experiment vytvořený.
 ### Statistiky, rychlost simulace
 Tabulka obsahuje sloupeček s tlačítkem **PAUSE** a 6 cedulkami se statistikami **MIDAGE**, **MEDAGE**, **MAXAGE**, **MAXCLUS**, **MIDCLUS**, **DURATION** a 2 posuvníky **KILL CELL PERCENTAGE**, **SIMULATION SPEED**.
-* **PAUSE**
-  Po stisknutí pozastaví simulaci a změní se na tlačítko **PLAY**.
-* **PLAY**
-  Po stisknutí ukončí pozastavení simulace a změní se na tlačítko **PAUSE**.
+* **PAUSE** Po stisknutí pozastaví simulaci a změní se na tlačítko **PLAY**.
+* **PLAY** Po stisknutí ukončí pozastavení simulace a změní se na tlačítko **PAUSE**.
+* **MIDAGE** Ukazuje aktuální aritmetický průměr věku buněk v krocích simulace.
+* **MEDAGE** Ukazuje aktuální medián věku buněk.
 ### Počáteční nastavení
 Tabulka obsahuje 4 posuvníky **
 
