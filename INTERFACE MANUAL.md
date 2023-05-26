@@ -6,11 +6,11 @@ Levá polovina okna zobrazuje petriho misku a buňky v ní. Umožňuje interakci
 Pomocí tří tlačítek s nápisy **EXPERIMENT 1**, **EXPERIMENT 2**, **EXPERIMENT 3** lze přepínat mezi pozorovanými experimentry v Petriho miskách. Aktuálně pozorovaný experiment má své tlačítko vybarvené červeně. Všechny experimenty jsou simulovány zvlášť, nezávisle na pozorovaném experimentu. Pod třemi tlačítky jsou vypsány celkové počty buněk v jednotlivých experimentech.
 ## Interakční tlačítka
 Sloupeček 4 tlačítek **FLUSH**, **KILL ALL**, **COPY**, **MODE: ---** slouží k základní interakci s experimentem.
-* **FLUSH:** Po stisknutí (levým tlačítkem myši) smaže pozorovaný experiment a změní se na tlačítko **CREATE**.
-* **CREATE:** Po stisknutí vytvoří nový experiment s náhodnými buňkami. Experiment lze nastavit v části okna **Počáteční nastavení**.
-* **KILL ALL:** Po stisknutí všechny buňky v pozorovaném experimentu zahynou.
-* **COPY:** Po sisknutí dočasně uloží (aktuálně jen po dobu běhu programu) označenou buňku. Aktuálně lze mít uloženou nejvýše jednu buňku.
-* **MODE: ---:** Po stisknutí změní funkci pravého tlačítka myši. Pokud je **MODE: PASTE**, tak pravé tlačítko myši vloží dočasně uloženou buňku na políčko v       petriho misce na kterém je kurzor. Pokud je **MODE: KILL**, tak pravé tlačítko myši smaže buňku z políčka v petriho misce na kterém je kurzor. 
+* **FLUSH** Po stisknutí (levým tlačítkem myši) smaže pozorovaný experiment a změní se na tlačítko **CREATE**.
+* **CREATE** Po stisknutí vytvoří nový experiment s náhodnými buňkami. Experiment lze nastavit v části okna **Počáteční nastavení**.
+* **KILL ALL** Po stisknutí všechny buňky v pozorovaném experimentu zahynou.
+* **COPY** Po sisknutí dočasně uloží (aktuálně jen po dobu běhu programu) označenou buňku. Aktuálně lze mít uloženou nejvýše jednu buňku.
+* **MODE: ---** Po stisknutí změní funkci pravého tlačítka myši. Pokud je **MODE: PASTE**, tak pravé tlačítko myši vloží dočasně uloženou buňku na políčko v       petriho misce na kterém je kurzor. Pokud je **MODE: KILL**, tak pravé tlačítko myši smaže buňku z políčka v petriho misce na kterém je kurzor. 
 ## Statistiky, rychlost simulace / Počáteční nastavení
 Pravá horní část okna je vymezená pro dvě části rozhraní. Tabulka **Statistiky, rychlost simulace** je zobrazená, pokud je daný experiment vytvořený. Tabulka **Počáteční nastavení** je zobrazená, pokud není zvolený experiment vytvořený.
 ### Statistiky, rychlost simulace
