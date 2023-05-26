@@ -17,8 +17,14 @@ Pravá horní část okna je vymezená pro dvě části rozhraní. Tabulka **Sta
 Tabulka obsahuje sloupeček s tlačítkem **PAUSE** a 6 cedulkami se statistikami **MIDAGE**, **MEDAGE**, **MAXAGE**, **MAXCLUS**, **MIDCLUS**, **DURATION** a 2 posuvníky **KILL CELL PERCENTAGE**, **SIMULATION SPEED**.
 * **PAUSE** Po stisknutí pozastaví simulaci a změní se na tlačítko **PLAY**.
 * **PLAY** Po stisknutí ukončí pozastavení simulace a změní se na tlačítko **PAUSE**.
-* **MIDAGE** Ukazuje aktuální aritmetický průměr věku buněk v krocích simulace.
+* **MIDAGE** Ukazuje aktuální aritmetický průměr věku buněk.
 * **MEDAGE** Ukazuje aktuální medián věku buněk.
+* **MAXAGE** Ukazuje aktuální nejvyšší věk buněk (tj. věk nejstarší buňky). Na cedulku lze kliknout lrvým tlačítkem myši a označit tak nejstarší buňku.
+* **MAXCLUS** Ukazuje aktuální velikost největšího klastru buněk. 3 buňky jsou ve stejném klastru, jestliže každá sousedí s každou (tvoří trojúhelník).
+* **MIDCLUS** Ukazuje aktuální aritmetický průměr velikostí klastrů buněk.
+* **DURATION** Ukazuje aktuální dobu trvání simulace, neboli počet odsimulovaných cyklů.
+* **KILL CELL PERCENTAGE** Po stisknutí tlačítka nad posuvníkem se z Petriho misky vymaže procento buněk určené hodnotou posuvníku.
+* **SIMULATION SPEED** Hodnota posuvníku určuje dobu mezi jednotlivými cykly simulace. Hodnota 1 odpovídá 10 sekundám, hodnota -1 odpovídá 0,05 neboli 1/20 sekundy.
 ### Počáteční nastavení
 Tabulka obsahuje 4 posuvníky **
 
