@@ -24,7 +24,7 @@ Tabulka obsahuje sloupeček s tlačítkem **PAUSE** a 6 cedulkami se statistikam
 * **MIDCLUS** Ukazuje aktuální aritmetický průměr velikostí klastrů buněk.
 * **DURATION** Ukazuje aktuální dobu trvání simulace, neboli počet odsimulovaných cyklů.
 * **KILL CELL PERCENTAGE** Po stisknutí tlačítka nad posuvníkem se z Petriho misky vymaže procento buněk určené hodnotou posuvníku.
-* **SIMULATION SPEED** Hodnota posuvníku určuje dobu mezi jednotlivými cykly simulace. Hodnota 1 odpovídá 10 sekundám, hodnota -1 odpovídá 0,05 neboli 1/20 sekundy.
+* **SIMULATION SPEED** Hodnota posuvníku určuje dobu mezi jednotlivými cykly simulace. Hodnota 1 odpovídá 5 sekundám, hodnota 0 odpovídá 0,5 neboli 1/2 sekundy,  hodnota -1 odpovídá 0,05 neboli 1/20 sekundy. Průběh mezi je přibližně exponenciální. Je možné, že při vysokém počtu buněk simulace cyklu zabere delší dobu než je nastaveno.
 ### Počáteční nastavení
 Tabulka obsahuje 4 posuvníky **
 
