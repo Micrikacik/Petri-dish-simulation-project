@@ -22,7 +22,7 @@ Tabulka obsahuje sloupeček s tlačítkem **`PAUSE`** a 6 cedulkami se statistik
 * **`MIDAGE`** Ukazuje aktuální aritmetický průměr věku buněk.
 * **`MEDAGE`** Ukazuje aktuální medián věku buněk.
 * **`MAXAGE`** Ukazuje aktuální nejvyšší věk buněk (tj. věk nejstarší buňky). Na cedulku lze kliknout lrvým tlačítkem myši a označit tak nejstarší buňku.
-* **MAXCLUS** Ukazuje aktuální velikost největšího klastru buněk. 3 buňky jsou ve stejném klastru, jestliže každá sousedí s každou (tvoří trojúhelník).
+* **`MAXCLUS`** Ukazuje aktuální velikost největšího klastru buněk. 3 buňky jsou ve stejném klastru, jestliže každá sousedí s každou (tvoří trojúhelník).
 * **`MIDCLUS`** Ukazuje aktuální aritmetický průměr velikostí klastrů buněk.
 * **`DURATION`** Ukazuje aktuální dobu trvání simulace, neboli počet odsimulovaných cyklů.
 * **`KILL CELL PERCENTAGE`** Po stisknutí tlačítka nad posuvníkem se z Petriho misky vymaže procento buněk určené hodnotou posuvníku.
