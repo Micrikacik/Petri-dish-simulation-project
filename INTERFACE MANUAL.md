@@ -1,7 +1,7 @@
 # Rozhraní
 Popis jednotlivých částí okna zleva doprava, shora dolů. Je přehlednější mít při čtení manuálu spuštěný program.
 ## Petriho miska
-Levá polovina okna zobrazuje petriho misku a buňky v ní. Umožňuje interakci s konkrétními buňkami. Kliknutím levým tlačítkem myši na buňku se buňka označí, bude zvýrazněná a lze ji dočasně uložit (více v **Interakční tlačítka**) a zvlášť pozorovat (více v **Informace o buňkách**). Kliknutím pravým tlačítkem myši lze na dané políčko vložit uloženou buňku, nebo smazat z daného políčka buňku (více v Interakční tlačítka). Políčka mají speciální souřadnicový systém blíže vysvětlený na stránkách https://www.redblobgames.com/grids/hexagons/. 
+Levá polovina okna zobrazuje petriho misku a buňky v ní. Umožňuje interakci s konkrétními buňkami. Kliknutím levým tlačítkem myši na buňku se buňka označí, bude zvýrazněná a lze ji dočasně uložit (více v **Interakční tlačítka**) a zvlášť pozorovat (více v **Informace o buňkách**). Kliknutím pravým tlačítkem myši lze na dané políčko vložit uloženou buňku, nebo smazat z daného políčka buňku (více v Interakční tlačítka). Políčka mají speciální souřadnicový systém blíže vysvětlený na stránkách https://www.redblobgames.com/grids/hexagons/. Obrázek ukazuje souřeadnice sousedů políčka relativně k němu.
 
 ![Obrázek souřadnicového systému](/Z%C3%A1po%C4%8Dtov%C3%BD%20program/Sprites/Coordinates.png)
 ## Experimenty
