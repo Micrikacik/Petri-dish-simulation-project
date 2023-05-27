@@ -3,20 +3,20 @@ Popis jednotlivých částí okna zleva doprava, shora dolů. Je přehlednějš�
 ## Petriho miska
 Levá polovina okna zobrazuje petriho misku a buňky v ní. Umožňuje interakci s konkrétními buňkami. Kliknutím levým tlačítkem myši na buňku se buňka označí, bude zvýrazněná a lze ji dočasně uložit (více v **Interakční tlačítka**) a zvlášť pozorovat (více v **Informace o buňkách**). Kliknutím pravým tlačítkem myši lze na dané políčko vložit uloženou buňku, nebo smazat z daného políčka buňku (více v Interakční tlačítka).
 ## Experimenty
-Pomocí tří tlačítek s nápisy **EXPERIMENT 1**, **EXPERIMENT 2**, **EXPERIMENT 3** lze přepínat mezi pozorovanými experimentry v Petriho miskách. Aktuálně pozorovaný experiment má své tlačítko vybarvené červeně. Všechny experimenty jsou simulovány zvlášť, nezávisle na pozorovaném experimentu. Pod třemi tlačítky jsou vypsány celkové počty buněk v jednotlivých experimentech.
+Pomocí tří tlačítek s nápisy **`EXPERIMENT 1`**, **`EXPERIMENT 2`**, **`EXPERIMENT 3`** lze přepínat mezi pozorovanými experimentry v Petriho miskách. Aktuálně pozorovaný experiment má své tlačítko vybarvené červeně. Všechny experimenty jsou simulovány zvlášť, nezávisle na pozorovaném experimentu. Pod třemi tlačítky jsou vypsány celkové počty buněk v jednotlivých experimentech.
 ## Interakční tlačítka
-Sloupeček 4 tlačítek **FLUSH**, **KILL ALL**, **COPY**, **MODE: ---** slouží k základní interakci s experimentem.
-* **FLUSH** Po stisknutí (levým tlačítkem myši) smaže pozorovaný experiment a změní se na tlačítko **CREATE**.
+Sloupeček 4 tlačítek **`FLUSH`**, **`KILL ALL`**, **`COPY`**, **`MODE: ---`** slouží k základní interakci s experimentem.
+* **FLUSH** Po stisknutí (levým tlačítkem myši) smaže pozorovaný experiment a změní se na tlačítko **`CREATE`**.
 * **CREATE** Po stisknutí vytvoří nový experiment s náhodnými buňkami. Experiment lze nastavit v části okna **Počáteční nastavení**.
 * **KILL ALL** Po stisknutí všechny buňky v pozorovaném experimentu zahynou.
 * **COPY** Po sisknutí dočasně uloží (aktuálně jen po dobu běhu programu) označenou buňku. Aktuálně lze mít uloženou nejvýše jednu buňku.
-* **MODE: ---** Po stisknutí změní funkci pravého tlačítka myši. Pokud je **MODE: PASTE**, tak pravé tlačítko myši vloží dočasně uloženou buňku na políčko v       petriho misce na kterém je kurzor. Pokud je **MODE: KILL**, tak pravé tlačítko myši smaže buňku z políčka v petriho misce na kterém je kurzor. 
+* **MODE: ---** Po stisknutí změní funkci pravého tlačítka myši. Pokud je **`MODE: PASTE`**, tak pravé tlačítko myši vloží dočasně uloženou buňku na políčko v       petriho misce na kterém je kurzor. Pokud je **`MODE: KILL`**, tak pravé tlačítko myši smaže buňku z políčka v petriho misce na kterém je kurzor. 
 ## Statistiky, rychlost simulace / Počáteční nastavení
 Pravá horní část okna je vymezená pro dvě části rozhraní. Tabulka **Statistiky, rychlost simulace** je zobrazená, pokud je daný experiment vytvořený. Tabulka **Počáteční nastavení** je zobrazená, pokud není zvolený experiment vytvořený.
 ### Statistiky, rychlost simulace
-Tabulka obsahuje sloupeček s tlačítkem **PAUSE** a 6 cedulkami se statistikami **MIDAGE**, **MEDAGE**, **MAXAGE**, **MAXCLUS**, **MIDCLUS**, **DURATION** a 2 posuvníky **KILL CELL PERCENTAGE**, **SIMULATION SPEED**.
+Tabulka obsahuje sloupeček s tlačítkem **PAUSE** a 6 cedulkami se statistikami **`MIDAGE`**, **`MEDAGE`**, **`MAXAGE`**, **`MAXCLUS`**, **`MIDCLUS`**, **`DURATION`** a 2 posuvníky **`KILL CELL PERCENTAGE`**, **`SIMULATION SPEED`**.
 * **PAUSE** Po stisknutí pozastaví simulaci a změní se na tlačítko **PLAY**.
-* **PLAY** Po stisknutí ukončí pozastavení simulace a změní se na tlačítko **PAUSE**.
+* **PLAY** Po stisknutí ukončí pozastavení simulace a změní se na tlačítko **`PAUSE`**.
 * **MIDAGE** Ukazuje aktuální aritmetický průměr věku buněk.
 * **MEDAGE** Ukazuje aktuální medián věku buněk.
 * **MAXAGE** Ukazuje aktuální nejvyšší věk buněk (tj. věk nejstarší buňky). Na cedulku lze kliknout lrvým tlačítkem myši a označit tak nejstarší buňku.
