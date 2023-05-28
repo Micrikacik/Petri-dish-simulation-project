@@ -2,7 +2,7 @@
 Popis jednotlivých částí okna zleva doprava, shora dolů. Je přehlednější mít při čtení manuálu spuštěný program.
 
 ## Petriho miska
-Levá polovina okna zobrazuje petriho misku a buňky v ní. Umožňuje interakci s konkrétními buňkami. Kliknutím levým tlačítkem myši na buňku se buňka označí, bude zvýrazněná a lze ji dočasně uložit (více v **Interakční tlačítka**) a zvlášť pozorovat (více v **Informace o buňkách**). Kliknutím pravým tlačítkem myši lze na dané políčko vložit uloženou buňku, nebo smazat z daného políčka buňku (více v Interakční tlačítka). Políčka mají speciální souřadnicový systém blíže vysvětlený na stránkách https://www.redblobgames.com/grids/hexagons/. Obrázek ukazuje souřadnice sousedů políčka relativně k němu.
+Levá polovina okna zobrazuje petriho misku a buňky v ní. Umožňuje interakci s konkrétními buňkami. Kliknutím levým tlačítkem myši na buňku se buňka označí, bude zvýrazněná a lze ji dočasně uložit (více v **Interakční tlačítka**) a zvlášť pozorovat (více v **Informace o buňkách**). Kliknutím pravým tlačítkem myši lze na dané políčko vložit uloženou buňku, nebo smazat z daného políčka buňku (více v **Interakční tlačítka**). Políčka mají speciální souřadnicový systém blíže vysvětlený na stránkách https://www.redblobgames.com/grids/hexagons/. Obrázek ukazuje souřadnice sousedů políčka relativně k němu.
 
 ![Obrázek souřadnicového systému](/Petri_dish_simulation/Sprites/Coordinates.png)
 
@@ -18,7 +18,7 @@ Sloupeček 4 tlačítek **`FLUSH`**, **`KILL ALL`**, **`COPY`**, **`MODE: ---`**
 * **`MODE: ---`** Po stisknutí změní funkci pravého tlačítka myši. Pokud je **`MODE: PASTE`**, tak pravé tlačítko myši vloží dočasně uloženou buňku na políčko v       petriho misce na kterém je kurzor. Pokud je **`MODE: KILL`**, tak pravé tlačítko myši smaže buňku z políčka v petriho misce na kterém je kurzor. 
 
 ## Statistiky, rychlost simulace / Počáteční nastavení
-Pravá horní část okna je vymezená pro dvě části rozhraní. Tabulka **Statistiky, rychlost simulace** je zobrazená, pokud je daný experiment vytvořený. Tabulka **Počáteční nastavení** je zobrazená, pokud není zvolený experiment vytvořený.
+Pravá horní část okna je vymezená pro dvě části rozhraní. Panel **Statistiky, rychlost simulace** je zobrazená, pokud je daný experiment vytvořený. Panel **Počáteční nastavení** je zobrazená, pokud není zvolený experiment vytvořený.
 ### Statistiky, rychlost simulace
 Tabulka obsahuje sloupeček s tlačítkem **`PAUSE`** a 6 cedulkami se statistikami **`MIDAGE`**, **`MEDAGE`**, **`MAXAGE`**, **`MAXCLUS`**, **`MIDCLUS`**, **`DURATION`** a 2 posuvníky **`KILL CELL PERCENTAGE`**, **`SIMULATION SPEED`**.
 * **`PAUSE`** Po stisknutí pozastaví simulaci a změní se na tlačítko **`PLAY`**.
@@ -38,4 +38,17 @@ Tabulka obsahuje 4 posuvníky **`GRID RADIUS`**, **`INITIAL CELL PERCENTAGE`**, 
 * **`INITIAL CELL ENERGY PERCENTAGE`** Hodnota posuvníku určuje hodnotu počáteční energie buněk. Ta se odvíjí od maximální energie uskladněné na políčku a hodnota posuvníku určuje kolik procent této energie mají buňky při vytvoření experimentu (políčka, na němž jsou buňky, zůstanou při vytvoření experimentu plná energie).
 * **`INITIAL CELL SIZE PERCENTAGE`** Hodnota posuvníku určuje, kolik procent své maximální velikosti mají buňky při vytvoření experimentu.
 
-##
+## Přepínací tlačítko
+Pod panelem **Experimenty** je tlačítko **`SETTINGS`**, které slouží k přepínání panelu v pravé dolní části okna.
+* **`SETTINGS`** Po stisknutí se pravý dolní panel změní na **Základní nastavení** a tlačítko se změní na **`ADVANCED SETTINGS`**.
+* **`ADVANCED SETTINGS`** Po stisknutí se pravý dolní panel změní na **Pokročilé nastavení** a tlačítko se změní na **`CELL STATS`**.
+* **`CELL STATS`** Po stisknutí se pravý dolní panel změní na **Informace o buňkách** a tlačítko se změní na **`SETTINGS`**.
+
+## Informace o buňkách / Základní nastavení / Pokročilé nastavení
+Pravá dolní část okna je vymezena pro tři části rozhraní. Mezi těmito částmi se přepíná pomocí tlačítka nad levým horním rohem panelu.
+### Informace o buňkách
+Panel je rozdělen na dva sloupce, a to **Cursor cell** a **Marked cell**. Oba ukazují informace o buňce. Sloupec **Cursor cell** ukazuje buňku v Petriho misce nad kterou je kurzor (pozn. zkoumaná buňka se může změnit pouze pohybem kurzoru). Sloupec **Marked cell** ukazuje buňku v petriho misce která je označená. Buňka se označuje kliknutím levého tlačítka myši na ni. Označená buňka je v Petriho misce zvýrazněná obrysem.
+
+Oba sloupce ukazují stejné typy informací.
+* První řádek (červený) ukazuje informace o políčku na němž je buňka, a to jeho hexagonov souřadnice tvaru `XX, XX, XX` (více v **Petriho miska**) a energii obsaženou v políčku `energy: XXXX`.
+* Druhý řádek (zelený) ukazuje základní informace o buňce, a to její hexagonovou pozici `Hex pos: XX, XX, XX`, kolik má energie `energy: XXXX`, jakou má velikost `size: XXXX` a jak je stará `age: XXXX`.
