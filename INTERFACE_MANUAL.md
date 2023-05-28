@@ -50,5 +50,8 @@ Pravá dolní část okna je vymezena pro tři části rozhraní. Mezi těmito �
 Panel je rozdělen na dva sloupce, a to **Cursor cell** a **Marked cell**. Oba ukazují informace o buňce. Sloupec **Cursor cell** ukazuje buňku v Petriho misce nad kterou je kurzor (pozn. zkoumaná buňka se může změnit pouze pohybem kurzoru). Sloupec **Marked cell** ukazuje buňku v petriho misce která je označená. Buňka se označuje kliknutím levého tlačítka myši na ni. Označená buňka je v Petriho misce zvýrazněná obrysem.
 
 Oba sloupce ukazují stejné typy informací.
-* První řádek (červený) ukazuje informace o políčku na němž je buňka, a to jeho hexagonov souřadnice tvaru `XX, XX, XX` (více v **Petriho miska**) a energii obsaženou v políčku `energy: XXXX`.
-* Druhý řádek (zelený) ukazuje základní informace o buňce, a to její hexagonovou pozici `Hex pos: XX, XX, XX`, kolik má energie `energy: XXXX`, jakou má velikost `size: XXXX` a jak je stará `age: XXXX`.
+* První řádek (červený) ukazuje informace o políčku na němž je buňka, a to jeho hexagonov souřadnice tvaru `XX, XX, XX` (více v **Petriho miska**), energii obsaženou v políčku `energy: XXXX`.
+* Druhý řádek (zelený) ukazuje základní informace o buňce, a to její hexagonovou pozici `Hex pos: XX, XX, XX`, kolik má energie `energy: XXXX`, jakou má velikost `size: XXXX`, jak je stará `age: XXXX`.
+* Třetí řádek ukazuje aktuální stav buňky. Čtvrtý řádek a dále ukazují postupně všechny možné stavy buňky. Tyto řádky mají základně zelenou barvu. Žlutá barva zvýrazňuje ten stav, ve kterém se buňka aktuálně nachází. Pokud oba sloupce **Cursor cell** i **Marked cell** ukazují nějakou buňku, tak ty stavy, ve kterých se buňka ve sloupci **Cursor cell** liší od buňky ve sloupci **Marked cell** jsou zvýrazněné červeně.
+
+  Řádky ukazující stavy zobrazují číslo stavu `X`, akci `AKCE:`, vlastnost akce `VLASTNOST:`, podmínku `PODMÍNKA:`, vlastnost podmínky `VLASTNOST`, příští stavy     `A:X B:X`.
