@@ -19,6 +19,7 @@ Sloupeček 4 tlačítek **`FLUSH`**, **`KILL ALL`**, **`COPY`**, **`MODE: ---`**
 
 ## Statistiky, rychlost simulace / Počáteční nastavení
 Pravá horní část okna je vymezená pro dvě části rozhraní. Panel **Statistiky, rychlost simulace** je zobrazená, pokud je daný experiment vytvořený. Panel **Počáteční nastavení** je zobrazená, pokud není zvolený experiment vytvořený.
+
 ### Statistiky, rychlost simulace
 Tabulka obsahuje sloupeček s tlačítkem **`PAUSE`** a 6 cedulkami se statistikami **`MIDAGE`**, **`MEDAGE`**, **`MAXAGE`**, **`MAXCLUS`**, **`MIDCLUS`**, **`DURATION`** a 2 posuvníky **`KILL CELL PERCENTAGE`**, **`SIMULATION SPEED`**.
 * **`PAUSE`** Po stisknutí pozastaví simulaci a změní se na tlačítko **`PLAY`**.
@@ -31,6 +32,7 @@ Tabulka obsahuje sloupeček s tlačítkem **`PAUSE`** a 6 cedulkami se statistik
 * **`DURATION`** Ukazuje aktuální dobu trvání simulace, neboli počet odsimulovaných cyklů.
 * **`KILL CELL PERCENTAGE`** Po stisknutí tlačítka nad posuvníkem se z Petriho misky vymaže procento buněk určené hodnotou posuvníku.
 * **`SIMULATION SPEED`** Hodnota posuvníku určuje dobu mezi jednotlivými cykly simulace. Hodnota 1 odpovídá 5 sekundám, hodnota 0 odpovídá 0,5 neboli 1/2 sekundy,  hodnota -1 odpovídá 0,05 neboli 1/20 sekundy. Průběh mezi je přibližně exponenciální. Je možné, že při vysokém počtu buněk simulace cyklu zabere delší dobu než je nastaveno.
+
 ### Počáteční nastavení
 Tabulka obsahuje 4 posuvníky **`GRID RADIUS`**, **`INITIAL CELL PERCENTAGE`**, **`INITIAL CELL ENERGY PERCENTAGE`**, **`INITIAL CELL SIZE PERCENTAGE`**. Všechny tyto posuvníky se používají při vytváření nového experimentu.
 * **`GRID RADIUS`** Hodnota posuvníku určuje poloměr Petriho misky, tj. počet políček od středu k okraji.
@@ -46,6 +48,7 @@ Pod panelem **Experimenty** je tlačítko **`SETTINGS`**, které slouží k pře
 
 ## Informace o buňkách / Základní nastavení / Pokročilé nastavení
 Pravá dolní část okna je vymezena pro tři části rozhraní. Mezi těmito částmi se přepíná pomocí tlačítka nad levým horním rohem panelu.
+
 ### Informace o buňkách
 Panel je rozdělen na dva sloupce, a to **Cursor cell** a **Marked cell**. Oba ukazují informace o buňce. Sloupec **Cursor cell** ukazuje buňku v Petriho misce nad kterou je kurzor (pozn. zkoumaná buňka se může změnit pouze pohybem kurzoru). Sloupec **Marked cell** ukazuje buňku v petriho misce která je označená. Buňka se označuje kliknutím levého tlačítka myši na ni. Označená buňka je v Petriho misce zvýrazněná obrysem.
 
@@ -53,3 +56,14 @@ Oba sloupce ukazují stejné typy informací.
 * První řádek (červený) ukazuje informace o políčku na němž je buňka, a to jeho hexagonov souřadnice tvaru `XX, XX, XX` (více v **Petriho miska**), energii obsaženou v políčku `energy: XXXX`.
 * Druhý řádek (zelený) ukazuje základní informace o buňce, a to její hexagonovou pozici `Hex pos: XX, XX, XX`, kolik má energie `energy: XXXX`, jakou má velikost `size: XXXX`, jak je stará `age: XXXX`.
 * Třetí řádek ukazuje aktuální stav buňky. Čtvrtý řádek a dále ukazují postupně všechny možné stavy buňky. Tyto řádky mají základně zelenou barvu. Žlutá barva zvýrazňuje ten stav, ve kterém se buňka aktuálně nachází. Pokud oba sloupce **Cursor cell** i **Marked cell** ukazují nějakou buňku, tak ty stavy, ve kterých se buňka ve sloupci **Cursor cell** liší od buňky ve sloupci **Marked cell**, jsou zvýrazněné červeně.Řádky ukazující stavy zobrazují číslo stavu `X`, akci `AKCE:`, vlastnost akce `VLASTNOST:`, podmínku `PODMÍNKA:`, vlastnost podmínky `VLASTNOST`, příští stavy `A:X B:X`.
+
+TODO: stavy buněk
+
+### Základní nastavení
+Panel obsahuje 4 posuvníky **`TILE REFILL PERCENTAGE`**, **`PERCENTAGE OF REFILLED TILES`**, **`CELL ENERGY ABSORB PERCENTAGE`**, **`CELL ENERGY CONSUMPTION PERCENTAGE`**, **`CELL ENERGY TILE LOSS PERCENTAGE`**, které slouží k jednoduché úpravě experimentu, a to i za běhu simulace.
+* **`TILE REFILL PERCENTAGE`** Hodnota posuvníku udává, kolik procent energie z maximální energie se obnoví políčku v každém cyklu.
+* **`PERCENTAGE OF REFILLED TILES`** Hodnota posuvníku udává, kolik procent políček se v kaýždém cyklu vybere pro obnovení energie, tj. tomuto procentu se energie obnoví podle hodnoty **`TILE REFILL PERCENTAGE`** a ostatním se energie neobnoví.
+* **`CELL ENERGY ABSORB PERCENTAGE`** Hodnota posuvníku udává, kolik nejvýše (políčko nemusí mít dost energie) procent maximální energie políčka každá buňka absorbuje z políčka, na kterém se nachází, každý cyklus.
+* **`CELL ENERGY CONSUMPTION PERCENTAGE`** Hodnota posuvníku udává, kolik energie buňka spotřebuje pro existenci každý cyklus. Tato hodnota se odvíjí od maximální energie políček a posuvník určuje, kolik procent této hodnoty buňka spotřebuje.
+* **`CELL ENERGY TILE LOSS PERCENTAGE`** Hodnota posuvníku udává, kolik nejvýše může buňka ztratit energie do okolí každý cyklus. Tato hodnota se odvíjí od maximální energie políček a posuvník určuje, kolik procent této hodnoty buňka ztratí. Dále se tato hodnota odvíjí od počtu sousedních políček, na kterých nejsou buňky. Hodnota ztráty se vynásobí zlomkem hodnoty od 0 do 1, který udává podíl políček bez buňek ku 6 (tj. ku všem okolním políčkám).
+
