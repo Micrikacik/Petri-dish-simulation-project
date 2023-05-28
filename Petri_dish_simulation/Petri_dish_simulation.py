@@ -784,7 +784,7 @@ class Action_Divide(State_Action):
         return "Act-divide: size " + str(self.resources_percentage) + "%, " + repr(self.divide_directions[self.current_direction])
 
     def __str__(self) -> str:
-        return "DIV: dir:" + str(self.divide_directions[self.current_direction].row) + str(self.divide_directions[self.current_direction].col_l) + str(self.divide_directions[self.current_direction].col_r) + " per: " + str(self.resources_percentage) + "%"
+        return "DIV: dir: " + str(self.divide_directions[self.current_direction].row) + str(self.divide_directions[self.current_direction].col_l) + str(self.divide_directions[self.current_direction].col_r) + " per: " + str(self.resources_percentage) + "%"
 
     def copy(self) -> Action_Divide:
         action = Action_Divide(self.state_settings)
@@ -845,7 +845,7 @@ class Action_Move(State_Action):
         return "Act-move: " + repr(self.move_directions[self.current_direction])
     
     def __str__(self) -> str:
-        return "MOVE: dir:" + str(self.move_directions[self.current_direction].row) + str(self.move_directions[self.current_direction].col_l) + str(self.move_directions[self.current_direction].col_r)
+        return "MOVE: dir: " + str(self.move_directions[self.current_direction].row) + str(self.move_directions[self.current_direction].col_l) + str(self.move_directions[self.current_direction].col_r)
 
     # prepsana funkce aktivace akce
     def action(self, cell:Cell, virtual_grid:Hex_Grid, real_grid:Hex_Grid):
