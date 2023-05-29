@@ -1156,13 +1156,16 @@ class Dish_Experiment():
         return cell
     
     def create_cell_from_cell(self, cell:Cell, initial_energy:int = -1, initial_size:int = -1) -> Cell:
-        """Returns new cell with same parameters as the given cell, suitable for this experiment.
-        That means resolution of its representing image."""
+        """Returns new cell with parameters copied from the given cell, suitable for this experiment.
+        That means resolution of its representing image corresponds to the grid radius."""
         if initial_energy == -1:
             initial_energy = cell.energy
         if initial_size == -1:
             initial_size = cell.size
-        new_cell = Cell(cell.states, initial_energy, initial_size, cell.cell_settings, self.pimage_cells)
+        new_states = []
+        for state in cell.states:
+            new_states.append(state.copy())
+        new_cell = Cell(new_states, initial_energy, initial_size, cell.cell_settings, self.pimage_cells)
         new_index = cell.pimage_index
         new_image = self.pi_64_cells[new_index]
         if self.tile_resolution[1] == 32:
