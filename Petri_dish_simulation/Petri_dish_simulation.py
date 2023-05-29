@@ -575,8 +575,8 @@ class Cell_State():
     def mutate_state(self, strong_mutation_chance:int, cell:Cell):
         """Chooses one of the following: strong action, action, strong condition, condition, following states.
         Strong means whole class is replaced by a new instance, other possibilites are only changing values."""
-        strong = strong_mutation_chance
-        weak = 100 - strong_mutation_chance
+        strong = strong_mutation_chance * 10
+        weak = 1000 - strong
         limits = [strong, 2 * strong, 3 * strong, 3 * strong + weak, 3 * strong + 2 * weak]
         number = randint(1, limits[-1])
         for mutation_index in range(len(limits)):
@@ -807,11 +807,11 @@ class Action_Divide(State_Action):
                 cell.energy //= (round(100 / (100 - self.resources_percentage)))
                 cell.size //= (round(100 / (100 - self.resources_percentage)))
                 mutation_chance = self.state_settings.mutation_chance
-                mutate = mutation_chance >= randint(0, 100)
+                mutate = (mutation_chance * 10 > randint(0, 1000))
                 while mutate:
                     index = randint(0, len(cell.states) - 1)
                     cell.states[index].mutate_state(self.state_settings.strong_mutation_chance, new_cell)
-                    mutate = mutation_chance >= randint(0, 100)
+                    mutate = (mutation_chance * 10 > randint(0, 1000))
                 real_grid.add_cell_to_hex_pos(new_cell, new_hex_pos)
 
     # prepsana funkce nahodne zmeny parametru, zde meni smer
@@ -1502,13 +1502,13 @@ class Laboratory(tk.Tk):
         self.frm_advanced_sim_settigs.columnconfigure([0, 1, 2, 3], weight = 1, minsize = 130)
         self.frm_advanced_sim_settigs.rowconfigure([i for i in range(10)], weight = 1, minsize = 25)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MAX ENERGY\nSIZE PERCENTAGE:").grid(column=0, row=0)
-        self.sbx_cell_max_en_multip = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 30), width = 12)
-        self.sbx_cell_max_en_multip.grid(column = 0, row = 1)
-
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MAX ENERGY\nBASE PERCENTAGE:").grid(column=0, row=2)
+        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MAX ENERGY\nBASE PERCENTAGE:").grid(column=0, row=0)
         self.sbx_cell_max_en_base = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 40), width = 12)
-        self.sbx_cell_max_en_base.grid(column = 0, row = 3)
+        self.sbx_cell_max_en_base.grid(column = 0, row = 1)
+
+        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MAX ENERGY\nSIZE PERCENTAGE:").grid(column=0, row=2)
+        self.sbx_cell_max_en_multip = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 30), width = 12)
+        self.sbx_cell_max_en_multip.grid(column = 0, row = 3)
 
         tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "ENERGY EAT\nPERCENTAGE:").grid(column=0, row=4)
         self.sbx_cell_en_eat_percentage = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 50), width = 12)
