@@ -57,7 +57,8 @@ Oba sloupce ukazují stejné typy informací.
 * Druhý řádek (zelený) ukazuje základní informace o buňce, a to její hexagonovou pozici `Hex pos: XX, XX, XX`, kolik má energie `energy: XXXX`, jakou má velikost `size: XXXX`, jak je stará `age: XXXX`.
 * Třetí řádek ukazuje aktuální stav buňky. Čtvrtý řádek a dále ukazují postupně všechny možné stavy buňky. Tyto řádky mají základně zelenou barvu. Žlutá barva zvýrazňuje ten stav, ve kterém se buňka aktuálně nachází. Pokud oba sloupce **Cursor cell** i **Marked cell** ukazují nějakou buňku, tak ty stavy, ve kterých se buňka ve sloupci **Cursor cell** liší od buňky ve sloupci **Marked cell**, jsou zvýrazněné červeně.Řádky ukazující stavy zobrazují číslo stavu `X`, akci `AKCE:`, vlastnost akce `VLASTNOST:`, podmínku `PODMÍNKA:`, vlastnost podmínky `VLASTNOST`, příští stavy `A:X B:X`.
 
-TODO: stavy buněk
+#### Stavy buněk (vysvětlení značení)
+
 
 ### Základní nastavení
 Panel obsahuje 4 posuvníky **`TILE REFILL PERCENTAGE`**, **`PERCENTAGE OF REFILLED TILES`**, **`CELL ENERGY ABSORB PERCENTAGE`**, **`CELL ENERGY CONSUMPTION PERCENTAGE`**, **`CELL ENERGY TILE LOSS PERCENTAGE`**, které slouží k jednoduché úpravě experimentu, a to i za běhu simulace.
