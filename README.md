@@ -6,4 +6,4 @@ Program vyžaduje instalaci Python 3.9 a vyšší.
 Program se spustí příkazem `python App.py` zadaném do příkazového řádku otevřeném v adresáři programu. 
 Alternativně lze program spustit příkazem `python Petri_dish_simulation.py`.
 ## Manuál
-Soubor `INTERFACE MANUAL.md` vysvětluje, jak ovládat program.
+Soubor `INTERFACE_MANUAL.md` vysvětluje, jak ovládat program.
