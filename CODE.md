@@ -1,5 +1,3 @@
 # Kód
-Popis základního fungování programu.
-
-Celé je to jeden velký miš-maš tříd.
+Popis základního fungování programu (celé je to jeden velký miš-maš tříd).
 ## 
