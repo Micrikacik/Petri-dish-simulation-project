@@ -58,7 +58,15 @@ Oba sloupce ukazují stejné typy informací.
 * Třetí řádek ukazuje aktuální stav buňky. Čtvrtý řádek a dále ukazují postupně všechny možné stavy buňky. Tyto řádky mají základně zelenou barvu. Žlutá barva zvýrazňuje ten stav, ve kterém se buňka aktuálně nachází. Pokud oba sloupce **Cursor cell** i **Marked cell** ukazují nějakou buňku, tak ty stavy, ve kterých se buňka ve sloupci **Cursor cell** liší od buňky ve sloupci **Marked cell**, jsou zvýrazněné červeně.Řádky ukazující stavy zobrazují číslo stavu `X`, akci `AKCE:`, vlastnost akce `VLASTNOST:`, podmínku `PODMÍNKA:`, vlastnost podmínky `VLASTNOST`, příští stavy `A:X B:X`.
 
 #### Stavy buněk (vysvětlení značení)
-
+**Značení akcí:**
+* STILL - *odpočinek*, okamžitě následuje podmínka
+* MOVE - *pohyb*, následuje směr pohybu
+* DIV - *buněčné dělení*, následuje směr dělení
+* SHARE - *sdílení energie*, následuje procento sdílené energie
+**Značení podmínek:**
+* ENER - *podmínka energie*, následuje, jakou nerovnost musí splňovat energie buňky
+* SIZE - *podmínka velikosti*, následuje, jakou nerovnost musí splňovat velikost buňky
+* SENS - *podmínka senzoru*, následuje směr senzoru, dále následuje typ senzoru (free - volné pole, cell - buňka na poli)
 
 ### Základní nastavení
 Panel obsahuje 4 posuvníky **`TILE REFILL PERCENTAGE`**, **`PERCENTAGE OF REFILLED TILES`**, **`CELL ENERGY ABSORB PERCENTAGE`**, **`CELL ENERGY CONSUMPTION PERCENTAGE`**, **`CELL ENERGY TILE LOSS PERCENTAGE`**, které slouží k jednoduché úpravě experimentu, a to i za běhu simulace.
