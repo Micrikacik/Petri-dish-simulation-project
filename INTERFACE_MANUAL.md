@@ -21,7 +21,7 @@ Sloupeček 4 tlačítek **`FLUSH`**, **`KILL ALL`**, **`COPY`**, **`MODE: ---`**
 Pravá horní část okna je vymezená pro dvě části rozhraní. Panel **Statistiky, rychlost simulace** je zobrazená, pokud je daný experiment vytvořený. Panel **Počáteční nastavení** je zobrazená, pokud není zvolený experiment vytvořený.
 
 ### Statistiky, rychlost simulace
-Tabulka obsahuje sloupeček s tlačítkem **`PAUSE`** a 6 cedulkami se statistikami **`MIDAGE`**, **`MEDAGE`**, **`MAXAGE`**, **`MAXCLUS`**, **`MIDCLUS`**, **`DURATION`** a 2 posuvníky **`KILL CELL PERCENTAGE`**, **`SIMULATION SPEED`**.
+Tabulka obsahuje sloupeček s tlačítkem **`PAUSE`** a 6 cedulkami se statistikami **`MIDAGE`**, **`MEDAGE`**, **`MAXAGE`**, **`MAXCLUS`**, **`MIDCLUS`**, **`CELLEAT`**, **`DURATION`** a 2 posuvníky **`KILL CELL PERCENTAGE`**, **`SIMULATION SPEED`**.
 * **`PAUSE`** Po stisknutí pozastaví simulaci a změní se na tlačítko **`PLAY`**.
 * **`PLAY`** Po stisknutí ukončí pozastavení simulace a změní se na tlačítko **`PAUSE`**.
 * **`MIDAGE`** Ukazuje aktuální aritmetický průměr věku buněk.
@@ -29,6 +29,7 @@ Tabulka obsahuje sloupeček s tlačítkem **`PAUSE`** a 6 cedulkami se statistik
 * **`MAXAGE`** Ukazuje aktuální nejvyšší věk buněk (tj. věk nejstarší buňky). Na cedulku lze kliknout lrvým tlačítkem myši a označit tak nejstarší buňku.
 * **`MAXCLUS`** Ukazuje aktuální velikost největšího klastru buněk. 3 buňky jsou ve stejném klastru, jestliže každá sousedí s každou (tvoří trojúhelník).
 * **`MIDCLUS`** Ukazuje aktuální aritmetický průměr velikostí klastrů buněk.
+* **`CELLEAT`** Ukazuje, kolik buňek bylo snězeno v posledním cyklu.
 * **`DURATION`** Ukazuje aktuální dobu trvání simulace, neboli počet odsimulovaných cyklů.
 * **`KILL CELL PERCENTAGE`** Po stisknutí tlačítka nad posuvníkem se z Petriho misky vymaže procento buněk určené hodnotou posuvníku.
 * **`SIMULATION SPEED`** Hodnota posuvníku určuje dobu mezi jednotlivými cykly simulace. Hodnota 1 odpovídá 5 sekundám, hodnota 0 odpovídá 0,5 neboli 1/2 sekundy,  hodnota -1 odpovídá 0,05 neboli 1/20 sekundy. Průběh mezi je přibližně exponenciální. Je možné, že při vysokém počtu buněk simulace cyklu zabere delší dobu než je nastaveno.
