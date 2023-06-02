@@ -559,38 +559,35 @@ class Cell_State():
     def mutate_state(self, strong_mutation_chance:int, cell:Cell):
         """Chooses one of the following: strong action, action, strong condition, condition, following states.
         Strong means whole class is replaced by a new instance, other possibilites are only changing values."""
-        strong = strong_mutation_chance
-        weak = 100 - strong
-        limits = [strong, 2 * strong, 3 * strong, 3 * strong + weak, 3 * strong + 2 * weak]
-        number = uniform(0, limits[-1])
-        for mutation_index in range(len(limits)):
-            if number <= limits[mutation_index]:
-                if mutation_index == 0:
-                    indexes = [x for x in range(len(self.state_actions_list))]
-                    current_index = 0
-                    while type(self.state_action) is not type(self.state_actions_list[current_index]):
-                        current_index += 1
-                    indexes.remove(current_index)
-                    index = indexes[randint(0, len(indexes) - 1)]
-                    self.state_action = self.state_actions_list[index].copy()
-                    self.state_action.randomize()
-                elif mutation_index == 1:
-                    indexes = [x for x in range(len(self.state_conditions_list))]
-                    current_index = 0
-                    while type(self.state_condition) is not type(self.state_conditions_list[current_index]):
-                        current_index += 1
-                    indexes.remove(current_index)
-                    index = indexes[randint(0, len(indexes) - 1)]
-                    self.state_condition = self.state_conditions_list[index].copy()
-                    self.state_condition.randomize()
-                elif mutation_index == 2:
-                    self.randomize_next_states()
-                elif mutation_index == 3:
-                    self.state_action.mutate()
-                elif mutation_index == 4:
-                    self.state_condition.mutate()
-                cell.randomize_image()
-                break
+        if uniform(0, 100) <= strong_mutation_chance:
+            mutation = randint(0, 2)
+            if mutation == 0:
+                indexes = [x for x in range(len(self.state_actions_list))]
+                current_index = 0
+                while type(self.state_action) is not type(self.state_actions_list[current_index]):
+                    current_index += 1
+                indexes.remove(current_index)
+                index = indexes[randint(0, len(indexes) - 1)]
+                self.state_action = self.state_actions_list[index].copy()
+                self.state_action.randomize()
+            elif mutation == 1:
+                indexes = [x for x in range(len(self.state_conditions_list))]
+                current_index = 0
+                while type(self.state_condition) is not type(self.state_conditions_list[current_index]):
+                    current_index += 1
+                indexes.remove(current_index)
+                index = indexes[randint(0, len(indexes) - 1)]
+                self.state_condition = self.state_conditions_list[index].copy()
+                self.state_condition.randomize()
+            else:
+                self.randomize_next_states()
+        else:
+            mutation = randint(0, 1)
+            if mutation == 0:
+                self.state_action.mutate()
+            else:
+                self.state_condition.mutate()
+        cell.randomize_image()
 
 # bunka
 class Cell():
@@ -1557,11 +1554,11 @@ class Laboratory(tk.Tk):
         self.sbx_cell_max_res_per.grid(column = 2, row = 5)
 
         tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MUTATION CHANCE\nPERCENTAGE:").grid(column=2, row=6)
-        self.sbx_cell_mut_chance = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 10), width = 12)
+        self.sbx_cell_mut_chance = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 5), width = 12)
         self.sbx_cell_mut_chance.grid(column = 2, row = 7)
 
         tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "STRONG MUTATION\nCHANCE PERCENTAGE:").grid(column=2, row=8)
-        self.sbx_cell_str_mut_chance = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 20), width = 12)
+        self.sbx_cell_str_mut_chance = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 35), width = 12)
         self.sbx_cell_str_mut_chance.grid(column = 2, row = 9)
 
         tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "DIVIDE ENERGY\nCOST PERCENTAGE:").grid(column=3, row=0)
