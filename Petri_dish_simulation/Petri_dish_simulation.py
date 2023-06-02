@@ -3,7 +3,7 @@
 from __future__ import annotations
 import tkinter as tk
 from time import time
-from random import randint, shuffle
+from random import randint, shuffle, uniform
 from math import pow, log10, floor
 from statistics import median, mean
 from itertools import count
@@ -14,7 +14,7 @@ IMAGE_NUMBER_CONST = 280
 
 # trida hex pozice pro snazsi manipulaci
 class Hex_Pos():
-    """Class for hexagonal coordinate system, can be added together like arithmetic vectors."""
+    """Class for hexagonal coordinate system. Hexagonal coordinates can be added together like arithmetic vectors."""
     row = 0
     col_l = 0
     col_r = 0
@@ -37,11 +37,6 @@ class Hex_Pos():
 def sum_hex_pos(pos_1:Hex_Pos, pos_2:Hex_Pos) -> Hex_Pos:
     """Sum of two hexagonal coordinates - one shoud be position, the other vector."""
     return Hex_Pos(pos_1.row + pos_2.row, pos_1.col_l + pos_2.col_l)
-
-# porovnani hex pozic
-def eaquel_hex_pos(pos_1:Hex_Pos, pos_2:Hex_Pos) -> bool:
-    """Checks if two hexagonal coordinates are same."""
-    return pos_1.row == pos_2.row and pos_1.col_l == pos_2.col_l
 
 # trida pole obsahujici informace o poli
 class Hex_Tile():
@@ -185,7 +180,7 @@ class Hex_Grid():
             # prvni a posledni radek jsou zdi
             if row == 0 or row == self.grid_diameter:
                 for col in range(len(self.hexagonal_tile_grid[row])):
-                    self.hexagonal_tile_grid[row][col] = Hex_Tile(self.pimage_tiles, self.array_to_hex(row, col), self.max_tile_energy)
+                    self.hexagonal_tile_grid[row][col] = Hex_Tile(self.pimage_tiles, self.array_to_hex(row, col), 0)
                     self.hexagonal_tile_grid[row][col].is_wall(True)
             # vyplneni ostatnich radku
             else:
@@ -201,6 +196,7 @@ class Hex_Grid():
                     # prvni a posledni Hex_Tile v radku jsou zdi
                     else:
                         new_tile.is_wall(True)
+                        new_tile.change_energy(-self.max_tile_energy)
 
     def __repr__(self) -> str:
         return "Grid: diameter " + str(self.grid_diameter) + ", radius " + str(self.grid_radius) + ", cell amount " + str(len(self.cells_in_grid)) 
@@ -229,18 +225,6 @@ class Hex_Grid():
             self.hexagonal_tile_grid[pos[0]][pos[1]].copy_to(other_grid.hexagonal_tile_grid[pos[0]][pos[1]])
         other_grid.changed_hex_poses = self.changed_hex_poses.copy()
         self.changed_hex_poses = set()
-
-    # nepoužitý kód ---------------------------------------------------------------------------------------
-    # okopiruje sve hodnoty do jine site
-    def copy_to(self, other_grid:Hex_Grid) -> None:
-        if self.grid_radius != other_grid.grid_radius:
-            raise Exception("Grids have to hav same radii.")
-        other_grid.cells_in_grid = self.cells_in_grid.copy()
-        # prekopirovani obsahu poli
-        for row in range(len(self.hexagonal_tile_grid)):
-            for col_l in range(len(self.hexagonal_tile_grid[row])):
-                self.hexagonal_tile_grid[row][col_l].copy_to(other_grid.hexagonal_tile_grid[row][col_l])
-    # -----------------------------------------------------------------------------------------------------
 
     # prevede pozici v hex siti na pozici pole v seznamu poli
     def hex_to_array(self, hex_pos:Hex_Pos) -> tuple:
@@ -366,16 +350,20 @@ class Hex_Grid():
     # funkce vyhodnoceni pohlcovani bunek na svych polich
     def cell_eating(self, real_grid:Hex_Grid) -> None:
         """Proceeds cell eating of all cell on the same tile."""
+        cells_eaten = 0
         for cell in self.cells_in_grid:
             tile = self.get_tile_at_hex_pos(cell.hex_pos)
-            if len(tile.cells_on_tile) > 1:
-                max_cell = tile.cells_on_tile[0]
-                for other_cell in tile.cells_on_tile:
+            tile_cells = tile.cells_on_tile.copy()
+            if len(tile_cells) > 1:
+                max_cell = tile_cells[0]
+                for other_cell in tile_cells:
                     if other_cell.size > max_cell.size:
                         max_cell = other_cell
-                for other_cell in tile.cells_on_tile:
+                for other_cell in tile_cells.copy():
                     if max_cell != other_cell:
                         max_cell.eat_cell(other_cell, real_grid)
+                        cells_eaten += 1
+        return cells_eaten
 
     # doplneni energie do policek
     def refill_energy(self, tile_percentage:int, energy_flow:int):
@@ -399,7 +387,8 @@ class Hex_Grid():
         then these three cells belong to one cluster."""
         unknown_cells = set(self.cells_in_grid)
         cell_clusters = {cell.cell_number : i for i, cell in enumerate(self.cells_in_grid, start = 0)} # seznam, jaká buňka je v jakém klastru (indexováno podle cells_in_grid)
-        
+        cell_amount = len(self.cells_in_grid)
+
         def spread_cluster(cell):
             """Help recursive function to find clusters."""
             unknown_cells.remove(cell)
@@ -414,18 +403,16 @@ class Hex_Grid():
                 if not tile.cells_on_tile:
                     was_cell_before = False
                     continue
-                was_cell_before = True
                 neighbour_cell = tile.cells_on_tile[0]
-                if neighbour_cell not in unknown_cells:
-                    continue
-                if was_cell_before:
-                    for search_index in range(len(self.cells_in_grid)):
+                if neighbour_cell in unknown_cells and was_cell_before:
+                    for search_index in range(cell_amount):
                         if self.cells_in_grid[search_index] == neighbour_cell:
                             if cell_clusters[neighbour_cell.cell_number] != cell_clusters[cell.cell_number]:
                                 cell_clusters[neighbour_cell.cell_number] = cell_clusters[cell.cell_number]
                                 spread_cluster(neighbour_cell)
+                was_cell_before = True
         
-        for cell_index in range(len(self.cells_in_grid)):
+        for cell_index in range(cell_amount):
             cell = self.cells_in_grid[cell_index]
             if cell not in unknown_cells:
                 continue
@@ -439,9 +426,9 @@ class Hex_Grid():
                 clusters.append(cluster_sizes[index])
         return clusters
 
-# trida pro uchovani aktualniho nastaveni bunek a stavu, vsechny bunky a stavy na ni maji odkaz
+# trida pro uchovani aktualniho nastaveni bunek a stavu, vsechny bunky a stavy maji odkaz na jednu jeji instanci
 class Cell_And_State_Settings():
-    """Class containing informations about settings if the cells."""
+    """Class containing informations about settings of the cells."""
     # nastaveni bunek
     energy_gain = round(0.16 * ENERGY_UNIT_CONST) # basic
     base_energy_loss = round(0.014 * ENERGY_UNIT_CONST) # basic 
@@ -465,11 +452,8 @@ class Cell_And_State_Settings():
     mutation_chance = 10 # advanced
     strong_mutation_chance = 20 # advanced
     divide_energy_cost = round(0.12 * ENERGY_UNIT_CONST) # advanced
-
     move_energy_cost = round(0.02 * ENERGY_UNIT_CONST) # advanced
-    
     size_mutation_amount = round(0.1 * MAX_CELL_SIZE_CONST) # advanced
-
     energy_mutation_amount = round(0.05 * ENERGY_UNIT_CONST) # advanced
 
 # zakladni trida akci
@@ -575,17 +559,29 @@ class Cell_State():
     def mutate_state(self, strong_mutation_chance:int, cell:Cell):
         """Chooses one of the following: strong action, action, strong condition, condition, following states.
         Strong means whole class is replaced by a new instance, other possibilites are only changing values."""
-        strong = strong_mutation_chance * 10
-        weak = 1000 - strong
+        strong = strong_mutation_chance
+        weak = 100 - strong
         limits = [strong, 2 * strong, 3 * strong, 3 * strong + weak, 3 * strong + 2 * weak]
-        number = randint(1, limits[-1])
+        number = uniform(0, limits[-1])
         for mutation_index in range(len(limits)):
             if number <= limits[mutation_index]:
                 if mutation_index == 0:
-                    self.state_action = self.state_actions_list[randint(0, len(self.state_actions_list) - 1)].copy()
+                    indexes = [x for x in range(len(self.state_actions_list))]
+                    current_index = 0
+                    while type(self.state_action) is not type(self.state_actions_list[current_index]):
+                        current_index += 1
+                    indexes.remove(current_index)
+                    index = indexes[randint(0, len(indexes) - 1)]
+                    self.state_action = self.state_actions_list[index].copy()
                     self.state_action.randomize()
                 elif mutation_index == 1:
-                    self.state_condition = self.state_conditions_list[randint(0, len(self.state_conditions_list) - 1)].copy()
+                    indexes = [x for x in range(len(self.state_conditions_list))]
+                    current_index = 0
+                    while type(self.state_condition) is not type(self.state_conditions_list[current_index]):
+                        current_index += 1
+                    indexes.remove(current_index)
+                    index = indexes[randint(0, len(indexes) - 1)]
+                    self.state_condition = self.state_conditions_list[index].copy()
                     self.state_condition.randomize()
                 elif mutation_index == 2:
                     self.randomize_next_states()
@@ -666,20 +662,20 @@ class Cell():
     # funkce zarizujici co ma bunka udelat na konci kroku
     def step(self, virtual_grid:Hex_Grid, real_grid:Hex_Grid):
         """Proceeds cell step, ie. energy change, size gain, actions, conditions, death, ..."""
-        self.step_energy(virtual_grid, real_grid)
+        self.step_energy_size(virtual_grid, real_grid)
         if self.alive:
             self.action(virtual_grid, real_grid)
             self.process_condition(virtual_grid)
             self.age_in_steps += 1
 
     # ziskani energie, ztrata energie a rust
-    def step_energy(self, virtual_grid:Hex_Grid, real_grid:Hex_Grid):
-        """Proceeds basic energy change of the cell step."""
+    def step_energy_size(self, virtual_grid:Hex_Grid, real_grid:Hex_Grid):
+        """Proceeds basic energy change and size grow of the cell step."""
         number_free_tiles_around = virtual_grid.get_number_free_tile_neighbours(self.hex_pos)
-        energy_loss = round(self.cell_settings.base_energy_loss + number_free_tiles_around * self.cell_settings.around_energy_loss / 6)
+        energy_loss = round(self.cell_settings.base_energy_loss + number_free_tiles_around / 6 * self.cell_settings.around_energy_loss)
         energy_change = real_grid.get_energy_from_tile_at_hex_pos(self.hex_pos, self.cell_settings.energy_gain) - energy_loss    
         self.change_energy(energy_change, real_grid)
-        size_change = round(self.cell_settings.base_size_gain + number_free_tiles_around * self.cell_settings.around_size_gain)
+        size_change = round(self.cell_settings.base_size_gain + number_free_tiles_around / 6 * self.cell_settings.around_size_gain)
         self.change_size(size_change, real_grid)
 
     # aktivace akce dane bunky
@@ -757,13 +753,13 @@ class Action_Energy_Share(State_Action):
 
     def mutate(self) -> None:
         amount = self.state_settings.share_mutation_amount
-        new_share_per = self.share_percentage + randint(-amount, amount)
+        new_share_per = round(self.share_percentage + uniform(-amount, amount), 1)
         min_per = self.state_settings.min_share_per
         max_per = self.state_settings.max_share_per
         self.share_percentage = min(max(new_share_per, min_per), max_per)
 
     def randomize(self):
-        new_share_per = randint(0, 100)
+        new_share_per = round(uniform(0, 100), 1)
         min_per = self.state_settings.min_share_per
         max_per = self.state_settings.max_share_per
         self.share_percentage = min(max(new_share_per, min_per), max_per)
@@ -807,25 +803,26 @@ class Action_Divide(State_Action):
                 cell.energy //= (round(100 / (100 - self.resources_percentage)))
                 cell.size //= (round(100 / (100 - self.resources_percentage)))
                 mutation_chance = self.state_settings.mutation_chance
-                mutate = (mutation_chance * 10 > randint(0, 1000))
+                mutate = (mutation_chance > uniform(0, 100))
                 while mutate:
                     index = randint(0, len(cell.states) - 1)
                     cell.states[index].mutate_state(self.state_settings.strong_mutation_chance, new_cell)
-                    mutate = (mutation_chance * 10 > randint(0, 1000))
+                    mutation_chance = round(mutation_chance / 2, 1)
+                    mutate = (mutation_chance > uniform(0, 100))
                 real_grid.add_cell_to_hex_pos(new_cell, new_hex_pos)
 
     # prepsana funkce nahodne zmeny parametru, zde meni smer
     def mutate(self):
         self.current_direction = randint(0, 5)
         amount = self.state_settings.divide_mutation_amount
-        new_resources_per = self.resources_percentage + randint(-amount, amount)
+        new_resources_per = round(self.resources_percentage + uniform(-amount, amount), 1)
         min_per = self.state_settings.min_resources_per
         max_per = self.state_settings.max_resources_per
         self.resources_percentage = min(max(new_resources_per, min_per), max_per)
 
     def randomize(self):
         self.current_direction = randint(0, 5)
-        new_resources_per = randint(0, 100)
+        new_resources_per = round(uniform(0, 100), 1)
         min_per = self.state_settings.min_resources_per
         max_per = self.state_settings.max_resources_per
         self.resources_percentage = min(max(new_resources_per, min_per), max_per)
@@ -888,7 +885,7 @@ class Condition_Sensor(State_Condition):
     """Derivation of the base condition class, overrides some functions of it."""
     sensor_directions = [Hex_Pos(1, 0, -1), Hex_Pos(1, -1, 0), Hex_Pos(0, 1, -1), Hex_Pos(-1, 0, 1), Hex_Pos(-1, 1, 0), Hex_Pos(0, -1, 1)]
     current_direction = 0
-    sensor_types = ["cell", "free"]
+    sensor_types = ["cell", "free", "ener"]
     current_type = 0
 
     def __init__(self, state_settings:Cell_And_State_Settings, current_direction:int = 0, current_type:int = 0) -> None:
@@ -911,12 +908,13 @@ class Condition_Sensor(State_Condition):
         return condition
     
     def check_condition(self, cell:Cell, virtual_grid:Hex_Grid) -> bool:
+        position = sum_hex_pos(cell.hex_pos, self.sensor_directions[self.current_direction])
         if self.sensor_types[self.current_type] == "cell":
-            position = sum_hex_pos(cell.hex_pos, self.sensor_directions[self.current_direction])
             return virtual_grid.get_tile_at_hex_pos(position).cells_on_tile
-        else:
-            position = sum_hex_pos(cell.hex_pos, self.sensor_directions[self.current_direction])
+        elif self.sensor_types[self.current_type] == "free":
             return not virtual_grid.get_tile_at_hex_pos(position).occupied
+        else:
+            return virtual_grid.get_tile_at_hex_pos(position).tile_energy > virtual_grid.get_tile_at_hex_pos(cell.hex_pos).tile_energy 
     
     # prepsana funkce nahodne zmeny parametru
     def mutate(self) -> None:
@@ -1040,8 +1038,8 @@ class Dish_Experiment():
     cell_with_maxage = Cell
     max_cluster_size = 0
     mid_cluster_size = 0
+    cells_eaten = 0
 
-    cell_updates = list[Cell]
     last_update_time = float
 
     cell_and_state_settings = Cell_And_State_Settings
@@ -1119,6 +1117,7 @@ class Dish_Experiment():
         self.virtual_grid = None
         self.real_grid = None
         self.simulation_steps_duration = 0
+        self.cells_eaten = 0
 
     def decimate_culture(self, percentage:int):
         """Kills given percentage of cells in experiment randomly."""
@@ -1235,7 +1234,6 @@ class Dish_Experiment():
         if abs(self.last_update_time - time()) > self.time_step:
             self.last_update_time = time()
             self.simulation_steps_duration += 1
-            self.cell_updates = self.real_grid.cells_in_grid.copy()
             self.simulation_update()
             self.number_of_cells = len(self.real_grid.cells_in_grid)
             return True
@@ -1243,10 +1241,11 @@ class Dish_Experiment():
 
     def simulation_update(self):
         """Updates whole simulation."""
-        for cell in self.cell_updates:
+        cell_updates = self.real_grid.cells_in_grid.copy()
+        for cell in cell_updates:
             cell.step(self.virtual_grid, self.real_grid)
+        self.cells_eaten = self.real_grid.cell_eating(self.real_grid)
         self.real_grid.refill_energy(self.refill_tile_percentage, round(self.refill_energy_flow * ENERGY_UNIT_CONST))
-        self.real_grid.cell_eating(self.real_grid)
         self.real_grid.copy_changes_to_and_reset(self.virtual_grid)
 
     # ukonci simulaci
@@ -1324,6 +1323,7 @@ class Laboratory(tk.Tk):
     lbl_max_age = tk.Label
     lbl_max_cluster = tk.Label
     lbl_mid_cluster = tk.Label
+    lbl_cells_eaten = tk.Label
     lbl_simulation_duration = tk.Label
     lbl_cursor_cell_head = tk.Label
     lbl_cursor_cell = list[tk.Label]
@@ -1396,7 +1396,7 @@ class Laboratory(tk.Tk):
 
         self.frm_simulation_run = tk.Frame(relief = tk.RAISED, borderwidth = 1)
         self.frm_simulation_run.columnconfigure([0, 1, 2], weight = 1)
-        self.frm_simulation_run.rowconfigure([0, 1, 2, 3, 4, 5, 6], weight = 1)
+        self.frm_simulation_run.rowconfigure([x for x in range(8)], weight = 1)
         self.frm_simulation_run.grid(column = 13, row = 0, columnspan = 4, rowspan = 4, sticky = "news")
 
         self.lbl_mid_age = tk.Label(master=self.frm_simulation_run, text="MIDAGE: 0", anchor="w", relief=tk.RAISED, height=1, width=15)
@@ -1404,6 +1404,7 @@ class Laboratory(tk.Tk):
         self.lbl_max_age = tk.Label(master=self.frm_simulation_run, text="MAXAGE: 0", anchor="w", relief=tk.RAISED, height=1, width=15)
         self.lbl_max_cluster = tk.Label(master=self.frm_simulation_run, text="MAXCLUS:", anchor="w", relief=tk.RAISED, height=1, width=15)
         self.lbl_mid_cluster = tk.Label(master=self.frm_simulation_run, text="MAXCLUS:", anchor="w", relief=tk.RAISED, height=1, width=15)
+        self.lbl_cells_eaten = tk.Label(master=self.frm_simulation_run, text="CELLEAT:", anchor="w", relief=tk.RAISED, height=1, width=15)
         self.lbl_simulation_duration = tk.Label(master=self.frm_simulation_run, text="DURATION: 0", anchor="w", relief=tk.RAISED, height=1, width=15)
 
         self.lbl_mid_age.grid(column=0, row=1)
@@ -1411,7 +1412,8 @@ class Laboratory(tk.Tk):
         self.lbl_max_age.grid(column=0, row=3)
         self.lbl_max_cluster.grid(column=0, row=4)
         self.lbl_mid_cluster.grid(column=0, row=5)
-        self.lbl_simulation_duration.grid(column=0, row=6)
+        self.lbl_cells_eaten.grid(column=0, row=6)
+        self.lbl_simulation_duration.grid(column=0, row=7)
 
         self.lbl_max_age.bind("<Button-1>", self.mark_maxage_cell)
 
@@ -1422,13 +1424,13 @@ class Laboratory(tk.Tk):
         self.btn_decimate_culture.grid(column=1, row=0)
 
         self.scl_decimate_percentage = tk.Scale(master = self.frm_simulation_run, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=300, width = 15)
-        self.scl_decimate_percentage.set(0.1)
-        self.scl_decimate_percentage.grid(column=1, row=1, rowspan = 6)
+        self.scl_decimate_percentage.set(10)
+        self.scl_decimate_percentage.grid(column=1, row=1, rowspan = 7)
 
         tk.Label(master = self.frm_simulation_run, height = 3, width = 12, text = "SIMULATION\nSPEED:").grid(column=2, row=0)
         self.scl_simulation_speed = tk.Scale(master = self.frm_simulation_run, from_ = -1, to = 1, resolution = 0.1, relief=tk.RAISED, length=300, width = 15)
         self.scl_simulation_speed.set(0.5)
-        self.scl_simulation_speed.grid(column=2, row=1, rowspan = 6)
+        self.scl_simulation_speed.grid(column=2, row=1, rowspan = 7)
 
         self.frm_initial_settings = tk.Frame(relief = tk.RAISED, borderwidth = 1)
         self.frm_initial_settings.columnconfigure([0, 1, 2, 3], weight = 1)
@@ -2022,6 +2024,7 @@ class Laboratory(tk.Tk):
         self.lbl_max_cluster.config(text="MAXCLUS: " + str(curr_exp.max_cluster_size))
         self.lbl_mid_cluster.config(text="MIDCLUS: " + str(curr_exp.mid_cluster_size))
         self.maxage_cell = curr_exp.cell_with_maxage
+        self.lbl_cells_eaten.config(text="CELLEAT: " + str(curr_exp.cells_eaten))
         self.lbl_simulation_duration.config(text="DURATION: " + str(curr_exp.simulation_steps_duration))
 
     def show_cell_counts(self):
