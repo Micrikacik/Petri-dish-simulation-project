@@ -64,7 +64,7 @@ Oba sloupce ukazují stejné typy informací.
 * MOVE - *pohyb*, následuje směr pohybu
 * DIV - *buněčné dělení*, následuje směr dělení
 * SHARE - *sdílení energie*, následuje procento sdílené energie
-* 
+
 **Značení podmínek:**
 * ENER - *podmínka energie*, následuje, jakou nerovnost musí splňovat energie buňky
 * SIZE - *podmínka velikosti*, následuje, jakou nerovnost musí splňovat velikost buňky
