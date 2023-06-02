@@ -17,9 +17,9 @@ Každý stav má akci, podmínku a výstupní stavy.
 #### Akce stavů
 * *odpočinek*  Buňka nedělá nic speciálního.
 * *pohyb* Buňka spotřebuje energii a pohne se o jedno políčko v daném směru. Může se pohnout na políčko s buňkou.
-* *buněčné dělení* Buňka spotřebuje energii a vytvoří novou buňku na daném okolním políčku, přičemž část své energie a velikosti dá této nové buňce. Nová buňka se může vytvořit na políčku s buňkou. Nová buňka má stavy stejné jako původní buňka ale je šance, že se nějak (ne příliš) její stavy pozmění. Může se změnit buďto celá akce, podmínka či výstupní stavy, nebo se změní jen hodnoty v akci či podmínce (např. směr a jiné)
-* *sdílení energie*
+* *buněčné dělení* Buňka spotřebuje energii a vytvoří novou buňku na daném okolním políčku, přičemž část své energie a velikosti dá této nové buňce. Nová buňka se může vytvořit na políčku s buňkou. Nová buňka má stavy stejné jako původní buňka ale je šance, že se nějak (ne příliš) její stavy pozmění. Může se změnit buďto celá akce, podmínka či výstupní stavy, nebo se změní jen hodnoty v akci či podmínce (např. směr, kontrolní číslo apod.).
+* *sdílení energie* Buňka rovnoměrně předá část své energie buňkám na okolních políčkách.
 #### Podmínky stavů
-* *podmínka energie*
-* *podmínka velikosti*
-* *podmínka senzoru*
+* *podmínka energie* Kontrola, zda je energie buňky pod (nebo nad) určitou hranicí, která se nazývá kontrolní číslo.
+* *podmínka velikosti* Kontrola, zda je velikost buňky pod (nebo nad) určitou hranicí, která se nazývá kontrolní číslo.
+* *podmínka senzoru* Kontrola, zda dané okolní políčko splňuje podmínku. Ta může být: Je na políčku buňka? (neuvažuje stěny), Je políčko prázdné? (uvažuje stěny).
