@@ -1,7 +1,7 @@
 # Kód
 Popis základního fungování programu (celé je to jeden velký miš-maš tříd). Všechny funkce i třídy jsou jednoduše popsané v kódu.
 ## Souřadnice (class Hex_Pos)
-Třída představující souřadnice v mřížce. Souřadnice jsou hexagonální, jsou 3 ale jedna je určena druhhýma dvěma. Tyto souřadnice se dají sčítat jako vektory.
+Třída představující souřadnice v mřížce. Souřadnice jsou hexagonální, jsou 3 ale jedna je určena druhhýma dvěma. Tyto souřadnice se dají sčítat jako vektory. Blíže vysvětleno na stránkách https://www.redblobgames.com/grids/hexagons/.
 ## Políčko (class Hex_Tile)
 Třída Hex_Tile představuje políčko mřížky simulace, Na každém políčku tak můžou být uloženy informace jako množství energie na políčku, buňky na políčku, jaký obrázek má políčko reprezentovat apod.
 ## Mřížka (class Hex_Grid)
