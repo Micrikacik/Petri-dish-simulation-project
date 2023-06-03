@@ -22,4 +22,6 @@ Každý stav má akci, podmínku a výstupní stavy.
 #### Podmínky stavů
 * *podmínka energie* Kontrola, zda je energie buňky pod (nebo nad) určitou hranicí, která se nazývá kontrolní číslo.
 * *podmínka velikosti* Kontrola, zda je velikost buňky pod (nebo nad) určitou hranicí, která se nazývá kontrolní číslo.
-* *podmínka senzoru* Kontrola, zda dané okolní políčko splňuje podmínku. Ta může být: Je na políčku buňka? (neuvažuje stěny), Je políčko prázdné? (uvažuje stěny).
+* *podmínka senzoru* Kontrola, zda dané okolní políčko splňuje podmínku. Ta může být: Je na políčku buňka? (neuvažuje stěny), Je políčko prázdné? (uvažuje stěny), Má políčko více energie naž má moje?.
+### Výstupní stavy
+Jeden stav má 2 výstupní stavy A a B. Do stavu A se přejde pokud je podmínka splněna, do stavu B pokud splněna není.
