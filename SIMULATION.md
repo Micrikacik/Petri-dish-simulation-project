@@ -8,7 +8,7 @@ Simulace je rozdělena do cyklů. V každém cyklu proběhne simulace celé Petr
 3. Buňky provedou akci svého aktuálního stavu. Poku buňka nemůže akci provést (např. nemá dost energie), tak ji neprovede.
 4. Buňky zkontrolují podmínku svého aktuálního stavu.
 5. Buňky podle výsledku předchozího kroku a svého aktuálního stavu přejdou do jiného stavu.
-6. Buňky, které skončily na jednom políčku jsou pohlceny největší buňkou na tomto políčku.
+6. Buňky, které skončily na jednom políčku, jsou pohlceny největší buňkou na tomto políčku.
 7. Vybraným políčkám v Petriho misce se obnový část energie.
 ## Stavba buněk
 Každá buňka má energii, velikost, reprezentační obrázek a 10 možných stavů, přičemž v každém cyklu simulace je aktivní právě jeden stav.
