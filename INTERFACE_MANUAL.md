@@ -68,7 +68,7 @@ Oba sloupce ukazují stejné typy informací.
 **Značení podmínek:**
 * ENER - *podmínka energie*, následuje, jakou nerovnost musí splňovat energie buňky
 * SIZE - *podmínka velikosti*, následuje, jakou nerovnost musí splňovat velikost buňky
-* SENS - *podmínka senzoru*, následuje směr senzoru, dále následuje typ senzoru (free - volné pole, cell - buňka na poli)
+* SENS - *podmínka senzoru*, následuje směr senzoru, dále následuje typ senzoru (free - volné pole, cell - buňka na poli, ener - porovnání energie)
 
 ### Základní nastavení
 Panel obsahuje 4 posuvníky **`TILE REFILL PERCENTAGE`**, **`PERCENTAGE OF REFILLED TILES`**, **`CELL ENERGY ABSORB PERCENTAGE`**, **`CELL ENERGY CONSUMPTION PERCENTAGE`**, **`CELL ENERGY TILE LOSS PERCENTAGE`**, které slouží k jednoduché úpravě experimentu, a to i za běhu simulace.
@@ -96,5 +96,5 @@ Panel obsahuje 18 polí s hodnotami, které slouží ke složitějším úpravá
 * **`MUTATION CHANCE PERCENTAGE`** Hodnota v poli udává, jaká je procentuální šance, že nová buňka u akce *buněčné dělení* zmutuje. Pokud buňka zmutuje, tak má poloviční šanci, že zmutuje znovu a to se opakuje dokud mutuje.
 * **`STRONG MUTATION CHANCE PERCENTAGE`** Hodnota v poli udává, jaká je procentuální šance, že při mutaci buňky dojde k silné mutaci, a to mutaci celé akce, podmínky nebo příštích stavů. Jinak proběhne slabá mutace pouze číselných hodnot akce nebo podmínky.
 * **`DIVIDE ENERGY COST PERCENTAGE`** Hodnota v poli udává, kolik energie stojí akce *buněčné dělení*. Tato hodnota se odvíjí od maximální energie políček a hodnota v poli určuje, kolik procent této hodnoty políček stojí akce *buněčné dělení*.
-* **`CON SIZE MUTATION CHANGE PERCENTAGE`** Hodnota v poli udává, o jakou hodnotu se může změnit kontrolní číslo v podmínce *podmínka velikost*. Tato hodnota se odvíjí od maximální velikosti buňěk a hodnota v poli určuje, kolik procent této hodnoty buněk je nejvyšší možná změna v podmínce.
+* **`CON SIZE MUTATION CHANGE PERCENTAGE`** Hodnota v poli udává, o jakou hodnotu se může změnit kontrolní číslo v podmínce *podmínka velikosti*. Tato hodnota se odvíjí od maximální velikosti buňěk a hodnota v poli určuje, kolik procent této hodnoty buněk je nejvyšší možná změna v podmínce.
 * **`CON EN MUTATION CHANGE PERCENTAGE`** Hodnota v poli udává, o jakou hodnotu se může změnit kontrolní číslo v podmínce *podmínka energie*. Tato hodnota se odvíjí od maximální energie políček a hodnota v poli určuje, kolik procent této hodnoty políček je nejvyšší možná změna v podmínce.
