@@ -553,34 +553,42 @@ class Cell_State():
         """Performs assignet action with the given cell."""
         self.state_action.action(cell, virtual_grid, real_grid)
 
+    def randomize_action(self):
+        """Randomly changes action of the state to a new, different one."""
+        indexes = [x for x in range(len(self.state_actions_list))]
+        current_index = 0
+        while type(self.state_action) is not type(self.state_actions_list[current_index]):
+            current_index += 1
+        indexes.remove(current_index)
+        index = indexes[randint(0, len(indexes) - 1)]
+        self.state_action = self.state_actions_list[index].copy()
+        self.state_action.randomize()
+
+    def randomize_condition(self):
+        """Randomly changes condition of the state to a new, different one."""
+        indexes = [x for x in range(len(self.state_conditions_list))]
+        current_index = 0
+        while type(self.state_condition) is not type(self.state_conditions_list[current_index]):
+            current_index += 1
+        indexes.remove(current_index)
+        index = indexes[randint(0, len(indexes) - 1)]
+        self.state_condition = self.state_conditions_list[index].copy()
+        self.state_condition.randomize()
+
     def randomize_next_states(self):
         """Randomly changes possible outputs of the process_condition() function."""
         self.next_state_A = randint(0, self.number_of_states - 1)
         self.next_state_B = randint(0, self.number_of_states - 1)
 
-    def mutate_state(self, strong_mutation_chance:int, cell:Cell):
+    def mutate_state(self, strong_mutation_chance:int):
         """Chooses one of the following: strong action, action, strong condition, condition, following states.
         Strong means whole class is replaced by a new instance, other possibilites are only changing values."""
         if uniform(0, 100) <= strong_mutation_chance:
             mutation = randint(0, 2)
             if mutation == 0:
-                indexes = [x for x in range(len(self.state_actions_list))]
-                current_index = 0
-                while type(self.state_action) is not type(self.state_actions_list[current_index]):
-                    current_index += 1
-                indexes.remove(current_index)
-                index = indexes[randint(0, len(indexes) - 1)]
-                self.state_action = self.state_actions_list[index].copy()
-                self.state_action.randomize()
+                self.randomize_action()
             elif mutation == 1:
-                indexes = [x for x in range(len(self.state_conditions_list))]
-                current_index = 0
-                while type(self.state_condition) is not type(self.state_conditions_list[current_index]):
-                    current_index += 1
-                indexes.remove(current_index)
-                index = indexes[randint(0, len(indexes) - 1)]
-                self.state_condition = self.state_conditions_list[index].copy()
-                self.state_condition.randomize()
+                self.randomize_condition()
             else:
                 self.randomize_next_states()
         else:
@@ -589,7 +597,6 @@ class Cell_State():
                 self.state_action.mutate()
             else:
                 self.state_condition.mutate()
-        cell.randomize_image()
 
 # bunka
 class Cell():
@@ -650,7 +657,7 @@ class Cell():
         return new_cell
 
     def randomize_image(self) -> None:
-        """Randomly selects new image representing the cell."""
+        """Randomly selects new image (different from the current one) representing the cell."""
         current_index = self.pimage_index
         next_index = randint(0, len(self.pimage_cells) - 1)
         while next_index == current_index:
@@ -803,9 +810,11 @@ class Action_Divide(State_Action):
                 cell.size //= (round(100 / (100 - self.resources_percentage)))
                 mutation_chance = self.state_settings.mutation_chance
                 mutate = (mutation_chance > uniform(0, 100))
+                if mutate:
+                    new_cell.randomize_image()
                 while mutate:
-                    index = randint(0, len(cell.states) - 1)
-                    cell.states[index].mutate_state(self.state_settings.strong_mutation_chance, new_cell)
+                    index = randint(0, len(new_cell.states) - 1)
+                    new_cell.states[index].mutate_state(self.state_settings.strong_mutation_chance)
                     mutation_chance = round(mutation_chance / 2, 1)
                     mutate = (mutation_chance > uniform(0, 100))
                 real_grid.add_cell_to_hex_pos(new_cell, new_hex_pos)
