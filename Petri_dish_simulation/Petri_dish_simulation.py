@@ -354,15 +354,17 @@ class Hex_Grid():
         for cell in self.cells_in_grid:
             tile = self.get_tile_at_hex_pos(cell.hex_pos)
             tile_cells = tile.cells_on_tile.copy()
-            if len(tile_cells) > 1:
-                max_cell = tile_cells[0]
-                for other_cell in tile_cells:
-                    if other_cell.size > max_cell.size:
-                        max_cell = other_cell
-                for other_cell in tile_cells.copy():
-                    if max_cell != other_cell:
-                        max_cell.eat_cell(other_cell, real_grid)
-                        cells_eaten += 1
+            cell_count = len(tile_cells)
+            if cell_count < 2:
+                continue
+            tile_cells.sort(key = lambda cell: cell.size)
+            index = cell_count - 1
+            while index > 0:
+                if tile_cells[index].alive:
+                    tile_cells[index].eat_cell(tile_cells[index - 1], real_grid)
+                    cells_eaten += 1
+                    tile_cells[index - 1] = tile_cells[index]
+                index -= 1
         return cells_eaten
 
     # doplneni energie do policek
@@ -591,7 +593,7 @@ class Cell_State():
 
 # bunka
 class Cell():
-    """Class representing a cell, cantaining all its information."""
+    """Class representing a cell, containing all its information."""
     iter_counter = count()
     cell_number = -1
     current_tile = Hex_Tile # pro snazsi pristup k poli
@@ -625,7 +627,7 @@ class Cell():
         self.info_list = ["",""] + [str(state) for state in self.states]
 
     def __repr__(self) -> str:
-        return "Cell - energy: " + str(self.energy) + ", size: " + str(self.size)
+        return "Cell - E: " + str(self.energy) + ", S: " + str(self.size) + ", A: " + str(self.alive)
     
     def __str__(self):
         return str(self.hex_pos) + " energy: " + str(self.energy) + " size: " + str(self.size) + " age: " + str(self.age_in_steps) + "\n" + str(self.current_state) + "\n" + "\n".join(self.states_repr_list)
@@ -689,7 +691,7 @@ class Cell():
     # funkce pridani statu pri snezeni bunky
     def eat_cell(self, other_cell:Cell, real_grid:Hex_Grid):
         """The cell eats other_cell accordingly to the cell setting class, other_cell dies."""
-        self.change_size(round(other_cell.energy * self.cell_settings.size_eat_fraction), real_grid)
+        self.change_size(round(other_cell.size * self.cell_settings.size_eat_fraction), real_grid)
         self.change_energy(round(other_cell.energy * self.cell_settings.energy_eat_fraction), real_grid)
         other_cell.death(real_grid)
 
