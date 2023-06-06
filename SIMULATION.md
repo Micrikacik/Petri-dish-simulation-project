@@ -31,8 +31,8 @@ Mutování může proběhnout pouze při akci *buněčné dělení* u nově vzni
   1. změna hodnot akce (jako směr, procento sdílení apod.)
   2. změna hodnot podmínky (jako směr, kontrolní číslo apod.)
 * silné mutování:
-  1. změna celé akce na náhodně vybranou jinou
-  2. změna celé podmínky na náhodně vybranou jinou
+  1. změna celé akce na jinou, náhodně vybranou
+  2. změna celé podmínky na jinou, náhodně vybranou
   3. změna výstupních stavů na náhodně vybrané (mohou být stejné)
 ## Pohlcování
 Největší buňka pohltí druhou největší, získá část její energie a velikosti a pokud je moc velká (nad 10000) tak zahyne. Poté se proces opakuje s (případně) aktuálně největší buňkou.
