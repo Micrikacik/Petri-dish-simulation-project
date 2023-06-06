@@ -35,4 +35,4 @@ Mutování může proběhnout pouze při akci *buněčné dělení* u nově vzni
   2. změna celé podmínky na jinou, náhodně vybranou
   3. změna výstupních stavů na náhodně vybrané (mohou být stejné)
 ## Pohlcování
-Největší buňka pohltí druhou největší, získá část její energie a velikosti a pokud je moc velká (nad 10000) tak zahyne. Poté se proces opakuje s (případně) aktuálně největší buňkou.
+Pohlcování probíhá na políčku s více než jednou buňkou. Největší buňka pohltí druhou největší, získá část její energie a velikosti a pokud je moc velká (nad 10000) tak zahyne. Poté se proces opakuje s (případně jinou) aktuálně největší buňkou.
