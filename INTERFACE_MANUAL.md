@@ -98,3 +98,6 @@ Panel obsahuje 18 polí s hodnotami, které slouží ke složitějším úpravá
 * **`DIVIDE ENERGY COST PERCENTAGE`** Hodnota v poli udává, kolik energie stojí akce *buněčné dělení*. Tato hodnota se odvíjí od maximální energie políček a hodnota v poli určuje, kolik procent této hodnoty políček stojí akce *buněčné dělení*.
 * **`CON SIZE MUTATION CHANGE PERCENTAGE`** Hodnota v poli udává, o jakou hodnotu se může změnit kontrolní číslo v podmínce *podmínka velikosti*. Tato hodnota se odvíjí od maximální velikosti buňěk a hodnota v poli určuje, kolik procent této hodnoty buněk je nejvyšší možná změna v podmínce.
 * **`CON EN MUTATION CHANGE PERCENTAGE`** Hodnota v poli udává, o jakou hodnotu se může změnit kontrolní číslo v podmínce *podmínka energie*. Tato hodnota se odvíjí od maximální energie políček a hodnota v poli určuje, kolik procent této hodnoty políček je nejvyšší možná změna v podmínce.
+
+## Ovládání posuvníků a polí s hodnotami
+Hodnotu posuvníku lze měnit buďto kliknutím nad nebo pod držadlo (pro preciznější změnu), nebo posouváním držadla se stisknutým levým tlačítkem myši. Hodnotu pole s hodnotou lze měnit buďto kliknutím na šipky na pravém okraji pole, nebo přímým zadáním hodnoty do pole.
