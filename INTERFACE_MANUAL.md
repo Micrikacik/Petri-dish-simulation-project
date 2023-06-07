@@ -5,7 +5,6 @@ Popis jednotlivých částí okna zleva doprava, shora dolů. Je přehlednějš�
 Levá polovina okna zobrazuje petriho misku a buňky v ní. Umožňuje interakci s konkrétními buňkami. Kliknutím levým tlačítkem myši na buňku se buňka označí, bude zvýrazněná a lze ji dočasně uložit (více v **Interakční tlačítka**) a zvlášť pozorovat (více v **Informace o buňkách**). Kliknutím pravým tlačítkem myši lze na dané políčko vložit uloženou buňku, nebo smazat z daného políčka buňku (více v **Interakční tlačítka**). Políčka mají speciální souřadnicový systém, blíže vysvětlený v [**CODE.md - Souřadnice**](SIMULATION.md). Obrázek ukazuje souřadnice sousedů políčka relativně k němu.
 
 ![Obrázek souřadnicového systému](/Petri_dish_simulation/Sprites/Coordinates.png)
-
 ## Experimenty
 Pomocí tří tlačítek s nápisy **`EXPERIMENT 1`**, **`EXPERIMENT 2`**, **`EXPERIMENT 3`** lze přepínat mezi pozorovanými experimentry v Petriho miskách. Aktuálně pozorovaný experiment má své tlačítko vybarvené červeně. Všechny experimenty jsou simulovány zvlášť, nezávisle na pozorovaném experimentu. Pod třemi tlačítky jsou vypsány celkové počty buněk v jednotlivých experimentech.
 
