@@ -5,7 +5,7 @@ Třída Hex_Grid představuje svět, nebo herní pole simulace. Je zde uložen 2
 ### Políčko (class Hex_Tile)
 Třída Hex_Tile představuje políčko mřížky simulace, Na každém políčku tak můžou být uloženy informace jako množství energie na políčku, buňky na políčku, jaký obrázek má políčko reprezentovat apod.
 ### Souřadnice (class Hex_Pos)
-Třída představující souřadnice v mřížce. Souřadnice jsou hexagonální, jsou 3 ale třetí je určena druhýma dvěma. Tyto souřadnice se dají sčítat jako vektory. První souřadnice udává řádek odshora, druhá udává šikmou řadu od levé dolní části mřížky a třetí udává šikmou řadu od pravé dolní části mřížky. Blíže vysvětleno na stránkách https://www.redblobgames.com/grids/hexagons/. Souřadnice okolních políček relativně vůči prostřednímu:
+Třída představující souřadnice v mřížce. Souřadnice jsou hexagonální, jsou 3 ale třetí je určena druhýma dvěma. Tyto souřadnice se dají sčítat jako vektory. První souřadnice udává řádek odshora, druhá udává šikmou řadu od levé dolní části mřížky a třetí udává šikmou řadu od levé horní části mřížky. Blíže vysvětleno na stránkách https://www.redblobgames.com/grids/hexagons/. Souřadnice okolních políček relativně vůči prostřednímu:
 
 ![Obrázek souřadnicového systému](/Petri_dish_simulation/Sprites/Coordinates.png)
 ## Buňky (class Cell)
