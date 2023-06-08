@@ -69,7 +69,7 @@ Oba sloupce ukazují stejné typy informací.
 * SIZE - *podmínka velikosti*, následuje, jakou nerovnost musí splňovat velikost buňky
 * SENS - *podmínka senzoru*, následuje směr senzoru, dále následuje typ senzoru (free - volné pole, cell - buňka na poli, ener - porovnání energie)
 
-(všechny akce a stavy jsou vysvětleny v [**SIMULATION.md - Souřadnice**](SIMULATION.md)
+(všechny akce a stavy jsou vysvětleny v [**SIMULATION.md - Stavba buněk - Stavy**](SIMULATION.md)
 
 ### Základní nastavení
 Panel obsahuje 4 posuvníky **`TILE REFILL PERCENTAGE`**, **`PERCENTAGE OF REFILLED TILES`**, **`CELL ENERGY ABSORB PERCENTAGE`**, **`CELL ENERGY CONSUMPTION PERCENTAGE`**, **`CELL ENERGY TILE LOSS PERCENTAGE`**, které slouží k jednoduché úpravě experimentu, a to i za běhu simulace.
