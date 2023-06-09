@@ -2064,7 +2064,7 @@ class Laboratory(tk.Tk):
         """Updates canvas in the interface according to the shown experiment.
         Update is divided into more steps to slightly improve interactivity."""
         current_exp = self.dish_experiments[self.current_experiment]
-        if not current_exp.experiment_created:
+        if current_exp is None or not current_exp.experiment_created:
             return
         current_grid = current_exp.real_grid
         current_hexagonal_grid = current_grid.hexagonal_tile_grid
