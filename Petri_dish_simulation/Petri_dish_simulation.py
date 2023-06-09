@@ -390,35 +390,35 @@ class Hex_Grid():
         unknown_cells = set(self.cells_in_grid)
         cell_clusters = {cell.cell_number : i for i, cell in enumerate(self.cells_in_grid, start = 0)} # seznam, jaká buňka je v jakém klastru (indexováno podle cells_in_grid)
         cell_amount = len(self.cells_in_grid)
-
-        def spread_cluster(cell):
-            """Help recursive function to find clusters."""
-            unknown_cells.remove(cell)
-            cell_pos = cell.hex_pos
-            dir_amount = len(self.neighbour_directions)
-            was_cell_before = False
-            for index in range(dir_amount + 1):
-                dir =  self.neighbour_directions[index % dir_amount]
-                tile = self.get_tile_at_hex_pos(sum_hex_pos(cell_pos, dir))
-                if tile is None:
-                    continue
-                if not tile.cells_on_tile:
-                    was_cell_before = False
-                    continue
-                neighbour_cell = tile.cells_on_tile[0]
-                if neighbour_cell in unknown_cells and was_cell_before:
-                    for search_index in range(cell_amount):
-                        if self.cells_in_grid[search_index] == neighbour_cell:
-                            if cell_clusters[neighbour_cell.cell_number] != cell_clusters[cell.cell_number]:
-                                cell_clusters[neighbour_cell.cell_number] = cell_clusters[cell.cell_number]
-                                spread_cluster(neighbour_cell)
-                was_cell_before = True
         
         for cell_index in range(cell_amount):
             cell = self.cells_in_grid[cell_index]
             if cell not in unknown_cells:
                 continue
-            spread_cluster(cell)
+            stack = [cell]
+            while stack:
+                stack_cell = stack.pop()
+                unknown_cells.remove(stack_cell)
+                cell_pos = stack_cell.hex_pos
+                dir_amount = len(self.neighbour_directions)
+                was_cell_before = False
+                for index in range(dir_amount + 1):
+                    dir =  self.neighbour_directions[index % dir_amount]
+                    tile = self.get_tile_at_hex_pos(sum_hex_pos(cell_pos, dir))
+                    if tile is None:
+                        continue
+                    if not tile.cells_on_tile:
+                        was_cell_before = False
+                        continue
+                    neighbour_cell = tile.cells_on_tile[0]
+                    if neighbour_cell in unknown_cells and was_cell_before:
+                        for search_index in range(cell_amount):
+                            if self.cells_in_grid[search_index] == neighbour_cell:
+                                if cell_clusters[neighbour_cell.cell_number] != cell_clusters[stack_cell.cell_number]:
+                                    cell_clusters[neighbour_cell.cell_number] = cell_clusters[stack_cell.cell_number]
+                                    stack.append(neighbour_cell)
+                    was_cell_before = True
+
         cluster_sizes = [0 for _ in range(len(self.cells_in_grid))]
         for cell in self.cells_in_grid:
             cluster_sizes[cell_clusters[cell.cell_number]] += 1
