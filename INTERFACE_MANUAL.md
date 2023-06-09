@@ -37,6 +37,8 @@ Tabulka obsahuje sloupeček s tlačítkem **`PAUSE`** a 6 cedulkami se statistik
 Tabulka obsahuje 4 posuvníky **`GRID RADIUS`**, **`INITIAL CELL PERCENTAGE`**, **`INITIAL CELL ENERGY PERCENTAGE`**, **`INITIAL CELL SIZE PERCENTAGE`**. Všechny tyto posuvníky se používají při vytváření nového experimentu.
 * **`GRID RADIUS`** Hodnota posuvníku určuje poloměr Petriho misky, tj. počet políček od středu k okraji.
 * **`INITIAL CELL PERCNTAGE`** Hodnota posuvníku určuje, kolik procent políček bude obsazeno buňkami při vytvoření nového experimentu (buňky jsou náhodně generované).
+
+**VAROVÁNÍ:** Velké množství bněk může extrémně zpomalit simulaci.
 * **`INITIAL CELL ENERGY PERCENTAGE`** Hodnota posuvníku určuje hodnotu počáteční energie buněk. Ta se odvíjí od maximální energie uskladněné na políčku a hodnota posuvníku určuje kolik procent této energie mají buňky při vytvoření experimentu (políčka, na němž jsou buňky, zůstanou při vytvoření experimentu plná energie).
 * **`INITIAL CELL SIZE PERCENTAGE`** Hodnota posuvníku určuje, kolik procent své maximální velikosti mají buňky při vytvoření experimentu.
 
