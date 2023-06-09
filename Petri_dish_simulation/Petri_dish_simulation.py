@@ -66,7 +66,7 @@ class Hex_Tile():
         return "Tile: " + str(self.hex_pos.row) + ", " + str(self.hex_pos.col_l) + ", " + str(self.hex_pos.col_r) + " is wall: " + str(self.tile_is_wall) + ", occupied: " + str(self.occupied) + ", energy " + str(self.tile_energy) +  ", cells: " + str(self.cells_on_tile)
     
     def __str__(self) -> str:
-        return "Tile: " + str(self.hex_pos.row) + ", " + str(self.hex_pos.col_l) + ", " + str(self.hex_pos.col_r) +  ", energy: " + str(self.tile_energy)
+        return "Tile: " + str(self.hex_pos.row) + ", " + str(self.hex_pos.col_l) + ", " + str(self.hex_pos.col_r) +  ", energy: " + str(self.tile_energy) + "/" + str(self.max_tile_energy)
     
     # vrati kopii tohoto hex pole
     def copy(self) -> Hex_Tile:
@@ -615,6 +615,7 @@ class Cell():
     energy = 0
     size = 0
     max_size = MAX_CELL_SIZE_CONST
+    max_energy = int
     age_in_steps = 0
     alive = True
 
@@ -632,6 +633,7 @@ class Cell():
         self.cell_photo_image = pimage_cells[0]
         self.hex_pos = Hex_Pos(0, 0, 0)
         self.info_list = ["",""] + [str(state) for state in self.states]
+        self.max_energy = self.cell_settings.max_energy_base + round(self.cell_settings.max_energy_multiplier * self.size)
 
     def __repr__(self) -> str:
         return "Cell - E: " + str(self.energy) + ", S: " + str(self.size) + ", A: " + str(self.alive)
@@ -642,7 +644,7 @@ class Cell():
     def get_info_list(self) -> list:
         """Returns list of strings. First contains information about the cell. Second contains description of its active state.
         Others contains descriptions of all states of the cell, each string one state."""
-        self.info_list[0] = str(self.hex_pos) + " energy: " + str(self.energy) + " size: " + str(self.size) + " age: " + str(self.age_in_steps)
+        self.info_list[0] = str(self.hex_pos) + " energy: " + str(self.energy) + "/" + str(self.max_energy) + " size: " + str(self.size) + " age: " + str(self.age_in_steps)
         self.info_list[1] = str(self.current_state)
         return self.info_list
 
@@ -714,10 +716,10 @@ class Cell():
     def change_energy(self, energy_amount:int, real_grid:Hex_Grid):
         """Changes size of the cell by the given amount. Cannot exceeds lower or upper limit.
         If lower limit of the cell size is exceeded, then the cell dies."""
-        max_energy = self.cell_settings.max_energy_base + round(self.cell_settings.max_energy_multiplier * self.size)
+        self.max_energy = self.cell_settings.max_energy_base + round(self.cell_settings.max_energy_multiplier * self.size)
         self.energy += energy_amount
-        if self.energy > max_energy:
-            self.energy = max_energy
+        if self.energy > self.max_energy:
+            self.energy = self.max_energy
         if self.energy <= 0:
             self.death(real_grid)
 
@@ -1649,6 +1651,9 @@ class Laboratory(tk.Tk):
         self.dish_experiments[experiment_number] = exp
         self.create_experiment_canvas(exp)
         exp.start_simulation()
+        exp.fast_global_statistics()
+        exp.slow_global_statistics()
+        self.show_statistics()
 
     def create_experiment_canvas(self, experiment:Dish_Experiment):
         """Creates new canvas in interface for experiment."""
