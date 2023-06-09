@@ -2,7 +2,7 @@
 Popis jednotlivých částí okna zleva doprava, shora dolů. Je přehlednější mít při čtení manuálu spuštěný program.
 
 ## Technická poznámka
-Velké množství buněk může extrémně zpomalit simulaci. Je doporučeno udržovat počty buěk nízké.
+Velké množství buněk může extrémně zpomalit simulaci. Je doporučeno udržovat počty buěk nízké a poloměr misky na 14 a méně.
 
 ## Petriho miska
 Levá polovina okna zobrazuje petriho misku a buňky v ní. Umožňuje interakci s konkrétními buňkami. Kliknutím levým tlačítkem myši na buňku se buňka označí, bude zvýrazněná a lze ji dočasně uložit (více v **Interakční tlačítka**) a zvlášť pozorovat (více v **Informace o buňkách**). Kliknutím pravým tlačítkem myši lze na dané políčko vložit uloženou buňku, nebo smazat z daného políčka buňku (více v **Interakční tlačítka**). Políčka mají speciální souřadnicový systém, blíže vysvětlený v [**CODE.md - Souřadnice**](CODE.md). Obrázek ukazuje souřadnice sousedů políčka relativně k němu.
