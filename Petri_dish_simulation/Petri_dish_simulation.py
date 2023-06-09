@@ -1502,12 +1502,12 @@ class Laboratory(tk.Tk):
 
         tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "CELL ENERGY\nCONSUMPTION\nPERCENTAGE:").grid(column=3, row=0)
         self.scl_cell_energy_loss = tk.Scale(master = self.frm_simulation_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=320, width = 12)
-        self.scl_cell_energy_loss.set(7.5)
+        self.scl_cell_energy_loss.set(7)
         self.scl_cell_energy_loss.grid(column=3, row=1, rowspan = 4)
 
         tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "CELL ENERGY\nTILE LOSS\nPERCENTAGE:").grid(column=4, row=0)
         self.scl_cell_around_en_loss = tk.Scale(master = self.frm_simulation_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=320, width = 12)
-        self.scl_cell_around_en_loss.set(7.5)
+        self.scl_cell_around_en_loss.set(8)
         self.scl_cell_around_en_loss.grid(column=4, row=1, rowspan = 4)
 
         self.frm_advanced_sim_settigs = tk.Frame(master = self, relief = tk.RAISED, borderwidth = 1)
@@ -1571,7 +1571,7 @@ class Laboratory(tk.Tk):
         self.sbx_cell_mut_chance.grid(column = 2, row = 7)
 
         tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "STRONG MUTATION\nCHANCE PERCENTAGE:").grid(column=2, row=8)
-        self.sbx_cell_str_mut_chance = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 35), width = 12)
+        self.sbx_cell_str_mut_chance = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 45), width = 12)
         self.sbx_cell_str_mut_chance.grid(column = 2, row = 9)
 
         tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "DIVIDE ENERGY\nCOST PERCENTAGE:").grid(column=3, row=0)
