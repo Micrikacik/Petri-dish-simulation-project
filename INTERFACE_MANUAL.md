@@ -1,6 +1,9 @@
 # Rozhraní
 Popis jednotlivých částí okna zleva doprava, shora dolů. Je přehlednější mít při čtení manuálu spuštěný program.
 
+## Technická poznámka
+Velké množství buněk může extrémně zpomalit simulaci. Je doporučeno udržovat počty buěk nízké.
+
 ## Petriho miska
 Levá polovina okna zobrazuje petriho misku a buňky v ní. Umožňuje interakci s konkrétními buňkami. Kliknutím levým tlačítkem myši na buňku se buňka označí, bude zvýrazněná a lze ji dočasně uložit (více v **Interakční tlačítka**) a zvlášť pozorovat (více v **Informace o buňkách**). Kliknutím pravým tlačítkem myši lze na dané políčko vložit uloženou buňku, nebo smazat z daného políčka buňku (více v **Interakční tlačítka**). Políčka mají speciální souřadnicový systém, blíže vysvětlený v [**CODE.md - Souřadnice**](CODE.md). Obrázek ukazuje souřadnice sousedů políčka relativně k němu.
 
@@ -37,8 +40,6 @@ Tabulka obsahuje sloupeček s tlačítkem **`PAUSE`** a 6 cedulkami se statistik
 Tabulka obsahuje 4 posuvníky **`GRID RADIUS`**, **`INITIAL CELL PERCENTAGE`**, **`INITIAL CELL ENERGY PERCENTAGE`**, **`INITIAL CELL SIZE PERCENTAGE`**. Všechny tyto posuvníky se používají při vytváření nového experimentu.
 * **`GRID RADIUS`** Hodnota posuvníku určuje poloměr Petriho misky, tj. počet políček od středu k okraji.
 * **`INITIAL CELL PERCNTAGE`** Hodnota posuvníku určuje, kolik procent políček bude obsazeno buňkami při vytvoření nového experimentu (buňky jsou náhodně generované).
-
-**VAROVÁNÍ:** Velké množství bněk může extrémně zpomalit simulaci.
 * **`INITIAL CELL ENERGY PERCENTAGE`** Hodnota posuvníku určuje hodnotu počáteční energie buněk. Ta se odvíjí od maximální energie uskladněné na políčku a hodnota posuvníku určuje kolik procent této energie mají buňky při vytvoření experimentu (políčka, na němž jsou buňky, zůstanou při vytvoření experimentu plná energie).
 * **`INITIAL CELL SIZE PERCENTAGE`** Hodnota posuvníku určuje, kolik procent své maximální velikosti mají buňky při vytvoření experimentu.
 
