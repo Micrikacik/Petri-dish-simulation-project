@@ -754,8 +754,8 @@ class Action_Energy_Share(State_Action):
         for tile in tiles_around:
             if tile.cells_on_tile:
                 cells_around.append(tile.cells_on_tile[0])
-        energy_share = round(cell.energy * percentage)
         if len(cells_around) > 0:
+            energy_share = round(cell.energy * percentage)
             cell.change_energy(-energy_share, real_grid)
             energy_bit = energy_share // len(cells_around)
             for other_cell in cells_around:
@@ -806,9 +806,9 @@ class Action_Divide(State_Action):
             new_hex_pos = sum_hex_pos(cell.hex_pos, divide_dir)
             new_tile = virtual_grid.get_tile_at_hex_pos(new_hex_pos)
             if new_tile and not new_tile.tile_is_wall:
+                cell.change_energy(-energy_cost, real_grid)
                 new_cell = cell.copy()
                 real_grid.add_cell_to_hex_pos(new_cell, new_hex_pos)
-                cell.change_energy(-energy_cost, real_grid)
                 passed_energy = round(cell.energy * self.resources_percentage / 100)
                 passed_size = round(cell.size * self.resources_percentage / 100)
                 new_cell.change_energy(passed_energy, real_grid)
