@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# Autor: Jiří Harvalík
+# Author: Jiri Harvalik
 
 from __future__ import annotations
 import tkinter as tk
