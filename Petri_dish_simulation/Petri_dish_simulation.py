@@ -807,11 +807,14 @@ class Action_Divide(State_Action):
             new_tile = virtual_grid.get_tile_at_hex_pos(new_hex_pos)
             if new_tile and not new_tile.tile_is_wall:
                 new_cell = cell.copy()
+                real_grid.add_cell_to_hex_pos(new_cell, new_hex_pos)
                 cell.change_energy(-energy_cost, real_grid)
-                new_cell.energy = cell.energy // (round(100 / self.resources_percentage))
-                new_cell.size = cell.size // (round(100 / self.resources_percentage))
-                cell.energy //= (round(100 / (100 - self.resources_percentage)))
-                cell.size //= (round(100 / (100 - self.resources_percentage)))
+                passed_energy = round(cell.energy * self.resources_percentage / 100)
+                passed_size = round(cell.size * self.resources_percentage / 100)
+                new_cell.change_energy(passed_energy, real_grid)
+                new_cell.change_size(passed_size, real_grid)
+                cell.change_energy(-passed_energy, real_grid)
+                cell.change_size(-passed_size, real_grid)
                 mutation_chance = self.state_settings.mutation_chance
                 mutate = (mutation_chance > uniform(0, 100))
                 if mutate:
@@ -821,7 +824,6 @@ class Action_Divide(State_Action):
                     new_cell.states[index].mutate_state(self.state_settings.strong_mutation_chance)
                     mutation_chance = round(mutation_chance / 2, 1)
                     mutate = (mutation_chance > uniform(0, 100))
-                real_grid.add_cell_to_hex_pos(new_cell, new_hex_pos)
 
     # prepsana funkce nahodne zmeny parametru, zde meni smer
     def mutate(self):
