@@ -9,7 +9,7 @@ Simulace je rozdělena do cyklů. V každém cyklu proběhne simulace celé Petr
 4. Buňky zkontrolují podmínku svého aktuálního stavu.
 5. Buňky podle výsledku předchozího kroku a svého aktuálního stavu přejdou do jiného stavu.
 6. Pokud je na jednom políčku více než jedna buňka, tak na tomto proběhne pohlcování.
-7. Vybraným políčkám v Petriho misce se obnový část energie.
+7. Vybraným políčkům v Petriho misce se obnoví část energie.
 ## Stavba buněk
 Každá buňka má energii, velikost, reprezentační obrázek a 10 možných stavů, přičemž v každém cyklu simulace je aktivní právě jeden stav.
 ### Stavy
@@ -24,7 +24,7 @@ Každý stav má akci, podmínku a výstupní stavy.
 * *podmínka velikosti* - Kontrola, zda je velikost buňky pod (nebo nad) určitou hranicí, která se nazývá kontrolní číslo.
 * *podmínka senzoru* - Kontrola, zda dané okolní políčko splňuje podmínku. Ta může být: Je na políčku buňka? (neuvažuje stěny), Je políčko prázdné? (uvažuje stěny), Má políčko více energie naž má moje?.
 #### Výstupní stavy
-Jeden stav má 2 výstupní stavy A a B. Do stavu A se přejde pokud je podmínka splněna, do stavu B pokud splněna není.
+Jeden stav má 2 výstupní stavy A a B. Do stavu A se přejde, pokud je podmínka splněna, a do stavu B, pokud splněna není.
 ## Mutování
 Mutování může proběhnout pouze při akci *buněčné dělení* u nově vzniklé buňky. Mutování probíhá na jednom náhodně vybraném stavu buňky, a pokud se opakuje vícekrát při jednom dělení, tak může vícekrát ovlivnit jeden stav. Při mutaci stavu může nastat jedna z 5 možností:
 * slabé mutování, číselně hodnoty se mohou změnit nejvýše o nastavené maximum změny:
