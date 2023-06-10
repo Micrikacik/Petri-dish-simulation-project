@@ -1,5 +1,5 @@
 # Kód
-Popis základního fungování programu (celé je to jeden velký mišmaš tříd). Všechny funkce i třídy jsou jednoduše popsané v kódu.
+Popis základního fungování programu (celé je to jeden velký mišmaš tříd). Všechny funkce i třídy jsou jednoduše popsané v kódu. O zobrazování se stará knihovna Tkinter.
 ## Mřížka (class Hex_Grid)
 Třída Hex_Grid představuje svět, nebo herní pole simulace. Je zde uložen 2D seznam jedinečných tříd políček (class Hex_Tile). Třída navíc obsahuje funkce pro manipulaci s mřížkou, jako přidání a odebrání buňky, doplnění energie políčkům v mřížce apod. Třída také počítá některé statistické údaje. Mřížky jsou používány dvě. Jedna slouží k ověřování podmínek a použití akce *sdílení energie* v daném cyklu a nemění se do konce cyklu, díky tomu všechny buňky vycházejí při vyhodnocování podmínek ze stejného základu. Druhá slouží k aplikování změn provedených v daném cyklu, jako pohyb, vytvoření buňky dělením apod. Na konci cyklu proběhne pohlcování buňěk, pokud jich je více na stejném políčku, a doplnění energie políček. Jakmile je vše dokončeno, tak se první mřížka aktualizuje, aby odpovídala druhé.
 ### Políčko (class Hex_Tile)
