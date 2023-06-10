@@ -1506,12 +1506,12 @@ class Laboratory(tk.Tk):
 
         tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "CELL ENERGY\nCONSUMPTION\nPERCENTAGE:").grid(column=3, row=0)
         self.scl_cell_energy_loss = tk.Scale(master = self.frm_simulation_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=320, width = 12)
-        self.scl_cell_energy_loss.set(7)
+        self.scl_cell_energy_loss.set(6.5)
         self.scl_cell_energy_loss.grid(column=3, row=1, rowspan = 4)
 
         tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "CELL ENERGY\nTILE LOSS\nPERCENTAGE:").grid(column=4, row=0)
         self.scl_cell_around_en_loss = tk.Scale(master = self.frm_simulation_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=320, width = 12)
-        self.scl_cell_around_en_loss.set(8)
+        self.scl_cell_around_en_loss.set(8.3)
         self.scl_cell_around_en_loss.grid(column=4, row=1, rowspan = 4)
 
         self.frm_advanced_sim_settigs = tk.Frame(master = self, relief = tk.RAISED, borderwidth = 1)
@@ -1519,7 +1519,7 @@ class Laboratory(tk.Tk):
         self.frm_advanced_sim_settigs.rowconfigure([i for i in range(10)], weight = 1, minsize = 25)
 
         tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MAX ENERGY\nBASE PERCENTAGE:").grid(column=0, row=0)
-        self.sbx_cell_max_en_base = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 40), width = 12)
+        self.sbx_cell_max_en_base = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 60), width = 12)
         self.sbx_cell_max_en_base.grid(column = 0, row = 1)
 
         tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MAX ENERGY\nSIZE PERCENTAGE:").grid(column=0, row=2)
