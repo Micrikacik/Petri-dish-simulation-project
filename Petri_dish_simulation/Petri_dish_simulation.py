@@ -1496,7 +1496,7 @@ class Laboratory(tk.Tk):
 
         tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "PERCENTAGE\nOF REFILLED\nTILES:").grid(column=1, row=0)
         self.scl_tile_perc_refill = tk.Scale(master = self.frm_simulation_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=320, width = 12)
-        self.scl_tile_perc_refill.set(35)
+        self.scl_tile_perc_refill.set(40)
         self.scl_tile_perc_refill.grid(column=1, row=1, rowspan = 4)
 
         tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "CELL ENERGY\nABSORB\nPERCENTAGE:").grid(column=2, row=0)
@@ -1511,7 +1511,7 @@ class Laboratory(tk.Tk):
 
         tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "CELL ENERGY\nTILE LOSS\nPERCENTAGE:").grid(column=4, row=0)
         self.scl_cell_around_en_loss = tk.Scale(master = self.frm_simulation_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=320, width = 12)
-        self.scl_cell_around_en_loss.set(8.3)
+        self.scl_cell_around_en_loss.set(8.5)
         self.scl_cell_around_en_loss.grid(column=4, row=1, rowspan = 4)
 
         self.frm_advanced_sim_settigs = tk.Frame(master = self, relief = tk.RAISED, borderwidth = 1)
@@ -1579,7 +1579,7 @@ class Laboratory(tk.Tk):
         self.sbx_cell_str_mut_chance.grid(column = 2, row = 9)
 
         tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "DIVIDE ENERGY\nCOST PERCENTAGE:").grid(column=3, row=0)
-        self.sbx_cell_div_cost = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 12), width = 12)
+        self.sbx_cell_div_cost = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 10), width = 12)
         self.sbx_cell_div_cost.grid(column = 3, row = 1)
 
         tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "CON SIZE MUTATION\nCHANGE PERCENTAGE:").grid(column=3, row=2)
