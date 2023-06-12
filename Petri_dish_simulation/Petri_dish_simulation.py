@@ -1285,12 +1285,15 @@ class Laboratory(tk.Tk):
     last_im_update_coords = list[int]
 
     frm_hex_grid = tk.Frame
+    frm_simulation_run = tk.Frame
+    frm_initial_settings = tk.Frame
     frm_cell_information = tk.Frame
     frm_simulation_settings = tk.Frame
     frm_advanced_sim_settigs = tk.Frame
-    frm_simulation_run = tk.Frame
-    frm_initial_settings = tk.Frame
+    frm_advanced_statistics = tk.Frame
     lower_frame_type = 0
+    lower_frame_list = list[tk.Frame]
+    switch_button_text_list = list[str]
 
     scl_simulation_speed = tk.Scale
     scl_grid_radius = tk.Scale
@@ -1330,6 +1333,9 @@ class Laboratory(tk.Tk):
     btn_decimate_culture = tk.Button
     btn_kill_all_cells = tk.Button
     btn_switch_paste_kill = tk.Button
+    btn_copy_cell = tk.Button
+    btn_stat_ages = list[tk.Button]
+    stat_ages = (1, 2, 5, 10, 20, 40, 80)
 
     lbl_cell_counts = list[tk.Label]
     lbl_mid_age = tk.Label
@@ -1343,6 +1349,7 @@ class Laboratory(tk.Tk):
     lbl_cursor_cell = list[tk.Label]
     lbl_marked_cell_head = tk.Label
     lbl_marked_cell = list[tk.Label]
+    lbl_statistics = list[list[tk.Label]]
 
     pi_64_tiles = list[tk.PhotoImage]
     pi_64_cells = list[tk.PhotoImage]
@@ -1386,228 +1393,270 @@ class Laboratory(tk.Tk):
         self.bind("<Button-1>", self.mark_cursor_cell)
         self.bind("<Button-3>", self.right_mouse_button)
 
-        frm_experiments = tk.Frame(relief = tk.RAISED, borderwidth = 1)
-        frm_experiments.rowconfigure([0, 1, 2, 3, 4, 5], weight = 1)
-        frm_experiments.columnconfigure(0, weight = 1)
-        frm_experiments.grid(column = 11, row = 0, rowspan = 3, sticky = "news")
+        def setup_experiments():
+            frm_experiments = tk.Frame(relief = tk.RAISED, borderwidth = 1)
+            frm_experiments.rowconfigure([0, 1, 2, 3, 4, 5], weight = 1)
+            frm_experiments.columnconfigure(0, weight = 1)
+            frm_experiments.grid(column = 11, row = 0, rowspan = 3, sticky = "news")
 
-        self.btn_experiments[0] = tk.Button(master = frm_experiments, text = "EXPERIMENT 1", command = lambda : self.switch_to_experiment(0), bg = "red")
-        self.btn_experiments[0].grid(row = 0)
-        self.btn_experiments[1] = tk.Button(master = frm_experiments, text = "EXPERIMENT 2", command = lambda : self.switch_to_experiment(1))
-        self.btn_experiments[1].grid(row = 2)
-        self.btn_experiments[2] = tk.Button(master = frm_experiments, text = "EXPERIMENT 3", command = lambda : self.switch_to_experiment(2))
-        self.btn_experiments[2].grid(row = 4)
+            self.btn_experiments[0] = tk.Button(master = frm_experiments, text = "EXPERIMENT 1", command = lambda : self.switch_to_experiment(0), bg = "red")
+            self.btn_experiments[0].grid(row = 0)
+            self.btn_experiments[1] = tk.Button(master = frm_experiments, text = "EXPERIMENT 2", command = lambda : self.switch_to_experiment(1))
+            self.btn_experiments[1].grid(row = 2)
+            self.btn_experiments[2] = tk.Button(master = frm_experiments, text = "EXPERIMENT 3", command = lambda : self.switch_to_experiment(2))
+            self.btn_experiments[2].grid(row = 4)
 
-        self.lbl_cell_counts = [None] * 3
-        for i in range(3):
-            self.lbl_cell_counts[i] = tk.Label(master = frm_experiments, text = "CELL COUNT:", height = 1, width = 15)
-            self.lbl_cell_counts[i].grid(row = 1 + 2 * i)
+            self.lbl_cell_counts = [None] * 3
+            for i in range(3):
+                self.lbl_cell_counts[i] = tk.Label(master = frm_experiments, text = "CELL COUNT:", height = 1, width = 15)
+                self.lbl_cell_counts[i].grid(row = 1 + 2 * i)
 
-        self.frm_hex_grid = tk.Frame(relief = tk.RAISED, borderwidth = 1)
-        self.frm_hex_grid.columnconfigure([i for i in range(10)], weight = 1)
-        self.frm_hex_grid.rowconfigure([i for i in range(10)], weight = 1)
-        self.frm_hex_grid.grid(column = 0, row = 0, columnspan = 10, rowspan = 10, sticky = "news")
+        def setup_hexgrid():
+            self.frm_hex_grid = tk.Frame(relief = tk.RAISED, borderwidth = 1)
+            self.frm_hex_grid.columnconfigure([i for i in range(10)], weight = 1)
+            self.frm_hex_grid.rowconfigure([i for i in range(10)], weight = 1)
+            self.frm_hex_grid.grid(column = 0, row = 0, columnspan = 10, rowspan = 10, sticky = "news")
 
-        self.frm_simulation_run = tk.Frame(relief = tk.RAISED, borderwidth = 1)
-        self.frm_simulation_run.columnconfigure([0, 1, 2], weight = 1)
-        self.frm_simulation_run.rowconfigure([x for x in range(8)], weight = 1)
-        self.frm_simulation_run.grid(column = 13, row = 0, columnspan = 4, rowspan = 4, sticky = "news")
+        def setup_simulation_run():
+            self.frm_simulation_run = tk.Frame(relief = tk.RAISED, borderwidth = 1)
+            self.frm_simulation_run.columnconfigure([0, 1, 2], weight = 1)
+            self.frm_simulation_run.rowconfigure([x for x in range(8)], weight = 1)
+            self.frm_simulation_run.grid(column = 13, row = 0, columnspan = 4, rowspan = 4, sticky = "news")
 
-        self.lbl_mid_age = tk.Label(master=self.frm_simulation_run, text="MIDAGE: 0", anchor="w", relief=tk.RAISED, height=1, width=15)
-        self.lbl_med_age = tk.Label(master=self.frm_simulation_run, text="MEDAGE: 0", anchor="w", relief=tk.RAISED, height=1, width=15)
-        self.lbl_max_age = tk.Label(master=self.frm_simulation_run, text="MAXAGE: 0", anchor="w", relief=tk.RAISED, height=1, width=15)
-        self.lbl_max_cluster = tk.Label(master=self.frm_simulation_run, text="MAXCLUS:", anchor="w", relief=tk.RAISED, height=1, width=15)
-        self.lbl_mid_cluster = tk.Label(master=self.frm_simulation_run, text="MAXCLUS:", anchor="w", relief=tk.RAISED, height=1, width=15)
-        self.lbl_cells_eaten = tk.Label(master=self.frm_simulation_run, text="CELLEAT:", anchor="w", relief=tk.RAISED, height=1, width=15)
-        self.lbl_simulation_duration = tk.Label(master=self.frm_simulation_run, text="DURATION: 0", anchor="w", relief=tk.RAISED, height=1, width=15)
+            self.lbl_mid_age = tk.Label(master=self.frm_simulation_run, text="MIDAGE: 0", anchor="w", relief=tk.RAISED, height=1, width=15)
+            self.lbl_med_age = tk.Label(master=self.frm_simulation_run, text="MEDAGE: 0", anchor="w", relief=tk.RAISED, height=1, width=15)
+            self.lbl_max_age = tk.Label(master=self.frm_simulation_run, text="MAXAGE: 0", anchor="w", relief=tk.RAISED, height=1, width=15)
+            self.lbl_max_cluster = tk.Label(master=self.frm_simulation_run, text="MAXCLUS:", anchor="w", relief=tk.RAISED, height=1, width=15)
+            self.lbl_mid_cluster = tk.Label(master=self.frm_simulation_run, text="MAXCLUS:", anchor="w", relief=tk.RAISED, height=1, width=15)
+            self.lbl_cells_eaten = tk.Label(master=self.frm_simulation_run, text="CELLEAT:", anchor="w", relief=tk.RAISED, height=1, width=15)
+            self.lbl_simulation_duration = tk.Label(master=self.frm_simulation_run, text="DURATION: 0", anchor="w", relief=tk.RAISED, height=1, width=15)
 
-        self.lbl_mid_age.grid(column=0, row=1)
-        self.lbl_med_age.grid(column=0, row=2)
-        self.lbl_max_age.grid(column=0, row=3)
-        self.lbl_max_cluster.grid(column=0, row=4)
-        self.lbl_mid_cluster.grid(column=0, row=5)
-        self.lbl_cells_eaten.grid(column=0, row=6)
-        self.lbl_simulation_duration.grid(column=0, row=7)
+            self.lbl_mid_age.grid(column=0, row=1)
+            self.lbl_med_age.grid(column=0, row=2)
+            self.lbl_max_age.grid(column=0, row=3)
+            self.lbl_max_cluster.grid(column=0, row=4)
+            self.lbl_mid_cluster.grid(column=0, row=5)
+            self.lbl_cells_eaten.grid(column=0, row=6)
+            self.lbl_simulation_duration.grid(column=0, row=7)
 
-        self.lbl_max_age.bind("<Button-1>", self.mark_maxage_cell)
+            self.lbl_max_age.bind("<Button-1>", self.mark_maxage_cell)
 
-        self.btn_play_pause_experiment = tk.Button(master = self.frm_simulation_run, text = "PAUSE", command = self.play_pause_simulation, width = 7, height = 2)
-        self.btn_play_pause_experiment.grid(column=0, row=0)
+            self.scl_decimate_percentage = tk.Scale(master = self.frm_simulation_run, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=300, width = 15)
+            self.scl_decimate_percentage.set(10)
+            self.scl_decimate_percentage.grid(column=1, row=1, rowspan = 7)
 
-        self.btn_decimate_culture = tk.Button(master = self.frm_simulation_run, text = "KILL CELL\nPERCENTAGE", command = self.button_decimate, width = 10, height = 2)
-        self.btn_decimate_culture.grid(column=1, row=0)
+            tk.Label(master = self.frm_simulation_run, height = 3, width = 12, text = "SIMULATION\nSPEED:").grid(column=2, row=0)
+            self.scl_simulation_speed = tk.Scale(master = self.frm_simulation_run, from_ = -1, to = 1, resolution = 0.1, relief=tk.RAISED, length=300, width = 15)
+            self.scl_simulation_speed.set(0.5)
+            self.scl_simulation_speed.grid(column=2, row=1, rowspan = 7)
 
-        self.scl_decimate_percentage = tk.Scale(master = self.frm_simulation_run, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=300, width = 15)
-        self.scl_decimate_percentage.set(10)
-        self.scl_decimate_percentage.grid(column=1, row=1, rowspan = 7)
+        def setup_interactive_buttons():
+            self.btn_play_pause_experiment = tk.Button(master = self.frm_simulation_run, text = "PAUSE", command = self.play_pause_simulation, width = 7, height = 2)
+            self.btn_play_pause_experiment.grid(column=0, row=0)
 
-        tk.Label(master = self.frm_simulation_run, height = 3, width = 12, text = "SIMULATION\nSPEED:").grid(column=2, row=0)
-        self.scl_simulation_speed = tk.Scale(master = self.frm_simulation_run, from_ = -1, to = 1, resolution = 0.1, relief=tk.RAISED, length=300, width = 15)
-        self.scl_simulation_speed.set(0.5)
-        self.scl_simulation_speed.grid(column=2, row=1, rowspan = 7)
+            self.btn_decimate_culture = tk.Button(master = self.frm_simulation_run, text = "KILL CELL\nPERCENTAGE", command = self.button_decimate, width = 10, height = 2)
+            self.btn_decimate_culture.grid(column=1, row=0)
 
-        self.frm_initial_settings = tk.Frame(relief = tk.RAISED, borderwidth = 1)
-        self.frm_initial_settings.columnconfigure([0, 1, 2, 3], weight = 1)
-        self.frm_initial_settings.rowconfigure([0, 1, 2, 3, 4], weight = 1)
+            self.btn_flush_create_experiment = tk.Button(master = self, text = "FLUSH", command = self.flush_create_current_experiment, width = 7, height = 2)
+            self.btn_flush_create_experiment.grid(column=12, row=0)
 
-        tk.Label(master = self.frm_initial_settings, height = 3, width = 10, text = "GRID RADIUS:").grid(column=0, row=0)
-        self.scl_grid_radius = tk.Scale(master = self.frm_initial_settings, from_ = 1, to = 30, resolution = 1, relief=tk.RAISED, length=300)
-        self.scl_grid_radius.set(14)
-        self.scl_grid_radius.grid(column=0, row=1, rowspan = 4)
+            self.btn_kill_all_cells = tk.Button(master = self, text = "KILL\nALL", command = self.kill_all_cells_in_current_experiment, width = 7, height = 2)
+            self.btn_kill_all_cells.grid(column=12, row=1)
 
-        tk.Label(master = self.frm_initial_settings, height = 3, width = 10, text = "INITIAL CELL\nPERCENTAGE:").grid(column=1, row=0)
-        self.scl_initial_cell_per = tk.Scale(master = self.frm_initial_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=300)
-        self.scl_initial_cell_per.set(25)
-        self.scl_initial_cell_per.grid(column=1, row=1, rowspan = 4)
+            self.btn_copy_cell = tk.Button(master = self, text = "COPY", command = self.copy_marked_cell, width = 7, height = 2)
+            self.btn_copy_cell.grid(column=12, row=2)
 
-        tk.Label(master = self.frm_initial_settings, height = 3, width = 10, text = "INITIAL CELL\nENERGY\nPERCENTAGE:").grid(column=2, row=0)
-        self.scl_initial_cell_en_per = tk.Scale(master = self.frm_initial_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=300)
-        self.scl_initial_cell_en_per.set(100)
-        self.scl_initial_cell_en_per.grid(column=2, row=1, rowspan = 4)
+            self.btn_switch_paste_kill = tk.Button(master = self, text = "MODE:\nPASTE", command = self.switch_paste_kill, width = 7, height = 2)
+            self.btn_switch_paste_kill.grid(column=12, row=3)
 
-        tk.Label(master = self.frm_initial_settings, height = 3, width = 10, text = "INITIAL CELL\nSIZE\nPERCENTAGE:").grid(column=3, row=0)
-        self.scl_initial_cell_size_per = tk.Scale(master = self.frm_initial_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=300)
-        self.scl_initial_cell_size_per.set(5)
-        self.scl_initial_cell_size_per.grid(column=3, row=1, rowspan = 4)
+            self.btn_switch_settings_cell_info = tk.Button(master = self, text = "SETTINGS", command = self.switch_settings_cell_info, width = 10, height = 2)
+            self.btn_switch_settings_cell_info.grid(column=11, row=3)
 
-        self.btn_flush_create_experiment = tk.Button(master = self, text = "FLUSH", command = self.flush_create_current_experiment, width = 7, height = 2)
-        self.btn_flush_create_experiment.grid(column=12, row=0)
+        def setup_initial_settings():
+            self.frm_initial_settings = tk.Frame(relief = tk.RAISED, borderwidth = 1)
+            self.frm_initial_settings.columnconfigure([0, 1, 2, 3], weight = 1)
+            self.frm_initial_settings.rowconfigure([0, 1, 2, 3, 4], weight = 1)
 
-        self.btn_kill_all_cells = tk.Button(master = self, text = "KILL\nALL", command = self.kill_all_cells_in_current_experiment, width = 7, height = 2)
-        self.btn_kill_all_cells.grid(column=12, row=1)
+            tk.Label(master = self.frm_initial_settings, height = 3, width = 10, text = "GRID RADIUS:").grid(column=0, row=0)
+            self.scl_grid_radius = tk.Scale(master = self.frm_initial_settings, from_ = 1, to = 30, resolution = 1, relief=tk.RAISED, length=300)
+            self.scl_grid_radius.set(14)
+            self.scl_grid_radius.grid(column=0, row=1, rowspan = 4)
 
-        self.btn_coppy_cell = tk.Button(master = self, text = "COPY", command = self.copy_marked_cell, width = 7, height = 2)
-        self.btn_coppy_cell.grid(column=12, row=2)
+            tk.Label(master = self.frm_initial_settings, height = 3, width = 10, text = "INITIAL CELL\nPERCENTAGE:").grid(column=1, row=0)
+            self.scl_initial_cell_per = tk.Scale(master = self.frm_initial_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=300)
+            self.scl_initial_cell_per.set(25)
+            self.scl_initial_cell_per.grid(column=1, row=1, rowspan = 4)
 
-        self.btn_switch_paste_kill = tk.Button(master = self, text = "MODE:\nPASTE", command = self.switch_paste_kill, width = 7, height = 2)
-        self.btn_switch_paste_kill.grid(column=12, row=3)
+            tk.Label(master = self.frm_initial_settings, height = 3, width = 10, text = "INITIAL CELL\nENERGY\nPERCENTAGE:").grid(column=2, row=0)
+            self.scl_initial_cell_en_per = tk.Scale(master = self.frm_initial_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=300)
+            self.scl_initial_cell_en_per.set(100)
+            self.scl_initial_cell_en_per.grid(column=2, row=1, rowspan = 4)
 
-        self.btn_switch_settings_cell_info = tk.Button(master = self, text = "SETTINGS", command = self.switch_settings_cell_info, width = 10, height = 2)
-        self.btn_switch_settings_cell_info.grid(column=11, row=3)
+            tk.Label(master = self.frm_initial_settings, height = 3, width = 10, text = "INITIAL CELL\nSIZE\nPERCENTAGE:").grid(column=3, row=0)
+            self.scl_initial_cell_size_per = tk.Scale(master = self.frm_initial_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=300)
+            self.scl_initial_cell_size_per.set(5)
+            self.scl_initial_cell_size_per.grid(column=3, row=1, rowspan = 4)
 
-        self.frm_simulation_settings = tk.Frame(master = self, relief = tk.RAISED, borderwidth = 1)
-        self.frm_simulation_settings.columnconfigure([0, 1, 2, 3, 4], weight = 1, minsize = 104)
-        self.frm_simulation_settings.rowconfigure([0, 1, 2, 3, 4], weight = 1, minsize = 50)
+        def setup_basic_settings():
+            self.frm_simulation_settings = tk.Frame(master = self, relief = tk.RAISED, borderwidth = 1)
+            self.frm_simulation_settings.columnconfigure([0, 1, 2, 3, 4], weight = 1, minsize = 104)
+            self.frm_simulation_settings.rowconfigure([0, 1, 2, 3, 4], weight = 1, minsize = 50)
 
-        tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "TILE REFILL\nPERCENTAGE:").grid(column=0, row=0)
-        self.scl_energy_refill_amount = tk.Scale(master = self.frm_simulation_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=320, width = 12)
-        self.scl_energy_refill_amount.set(20)
-        self.scl_energy_refill_amount.grid(column=0, row=1, rowspan = 4)
+            tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "TILE REFILL\nPERCENTAGE:").grid(column=0, row=0)
+            self.scl_energy_refill_amount = tk.Scale(master = self.frm_simulation_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=320, width = 12)
+            self.scl_energy_refill_amount.set(20)
+            self.scl_energy_refill_amount.grid(column=0, row=1, rowspan = 4)
 
-        tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "PERCENTAGE\nOF REFILLED\nTILES:").grid(column=1, row=0)
-        self.scl_tile_perc_refill = tk.Scale(master = self.frm_simulation_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=320, width = 12)
-        self.scl_tile_perc_refill.set(40)
-        self.scl_tile_perc_refill.grid(column=1, row=1, rowspan = 4)
+            tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "PERCENTAGE\nOF REFILLED\nTILES:").grid(column=1, row=0)
+            self.scl_tile_perc_refill = tk.Scale(master = self.frm_simulation_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=320, width = 12)
+            self.scl_tile_perc_refill.set(40)
+            self.scl_tile_perc_refill.grid(column=1, row=1, rowspan = 4)
 
-        tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "CELL ENERGY\nABSORB\nPERCENTAGE:").grid(column=2, row=0)
-        self.scl_cell_energy_gain = tk.Scale(master = self.frm_simulation_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=320, width = 12)
-        self.scl_cell_energy_gain.set(16)
-        self.scl_cell_energy_gain.grid(column=2, row=1, rowspan = 4)
+            tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "CELL ENERGY\nABSORB\nPERCENTAGE:").grid(column=2, row=0)
+            self.scl_cell_energy_gain = tk.Scale(master = self.frm_simulation_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=320, width = 12)
+            self.scl_cell_energy_gain.set(16)
+            self.scl_cell_energy_gain.grid(column=2, row=1, rowspan = 4)
 
-        tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "CELL ENERGY\nCONSUMPTION\nPERCENTAGE:").grid(column=3, row=0)
-        self.scl_cell_energy_loss = tk.Scale(master = self.frm_simulation_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=320, width = 12)
-        self.scl_cell_energy_loss.set(6.5)
-        self.scl_cell_energy_loss.grid(column=3, row=1, rowspan = 4)
+            tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "CELL ENERGY\nCONSUMPTION\nPERCENTAGE:").grid(column=3, row=0)
+            self.scl_cell_energy_loss = tk.Scale(master = self.frm_simulation_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=320, width = 12)
+            self.scl_cell_energy_loss.set(6.5)
+            self.scl_cell_energy_loss.grid(column=3, row=1, rowspan = 4)
 
-        tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "CELL ENERGY\nTILE LOSS\nPERCENTAGE:").grid(column=4, row=0)
-        self.scl_cell_around_en_loss = tk.Scale(master = self.frm_simulation_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=320, width = 12)
-        self.scl_cell_around_en_loss.set(8.5)
-        self.scl_cell_around_en_loss.grid(column=4, row=1, rowspan = 4)
+            tk.Label(master = self.frm_simulation_settings, height = 3, width = 12, text = "CELL ENERGY\nTILE LOSS\nPERCENTAGE:").grid(column=4, row=0)
+            self.scl_cell_around_en_loss = tk.Scale(master = self.frm_simulation_settings, from_ = 0, to = 100, resolution = 0.1, relief=tk.RAISED, length=320, width = 12)
+            self.scl_cell_around_en_loss.set(8.5)
+            self.scl_cell_around_en_loss.grid(column=4, row=1, rowspan = 4)
 
-        self.frm_advanced_sim_settigs = tk.Frame(master = self, relief = tk.RAISED, borderwidth = 1)
-        self.frm_advanced_sim_settigs.columnconfigure([0, 1, 2, 3], weight = 1, minsize = 130)
-        self.frm_advanced_sim_settigs.rowconfigure([i for i in range(10)], weight = 1, minsize = 25)
+        def setup_advanced_settings():
+            self.frm_advanced_sim_settigs = tk.Frame(master = self, relief = tk.RAISED, borderwidth = 1)
+            self.frm_advanced_sim_settigs.columnconfigure([0, 1, 2, 3], weight = 1, minsize = 130)
+            self.frm_advanced_sim_settigs.rowconfigure([i for i in range(10)], weight = 1, minsize = 25)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MAX ENERGY\nBASE PERCENTAGE:").grid(column=0, row=0)
-        self.sbx_cell_max_en_base = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 60), width = 12)
-        self.sbx_cell_max_en_base.grid(column = 0, row = 1)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MAX ENERGY\nBASE PERCENTAGE:").grid(column=0, row=0)
+            self.sbx_cell_max_en_base = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 60), width = 12)
+            self.sbx_cell_max_en_base.grid(column = 0, row = 1)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MAX ENERGY\nSIZE PERCENTAGE:").grid(column=0, row=2)
-        self.sbx_cell_max_en_multip = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 30), width = 12)
-        self.sbx_cell_max_en_multip.grid(column = 0, row = 3)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MAX ENERGY\nSIZE PERCENTAGE:").grid(column=0, row=2)
+            self.sbx_cell_max_en_multip = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 30), width = 12)
+            self.sbx_cell_max_en_multip.grid(column = 0, row = 3)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "ENERGY EAT\nPERCENTAGE:").grid(column=0, row=4)
-        self.sbx_cell_en_eat_percentage = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 50), width = 12)
-        self.sbx_cell_en_eat_percentage.grid(column = 0, row = 5)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "ENERGY EAT\nPERCENTAGE:").grid(column=0, row=4)
+            self.sbx_cell_en_eat_percentage = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 50), width = 12)
+            self.sbx_cell_en_eat_percentage.grid(column = 0, row = 5)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "BASE SIZE\nGAIN PERCENTAGE:").grid(column=0, row=6)
-        self.sbx_cell_base_size_gain = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 2.6), width = 12)
-        self.sbx_cell_base_size_gain.grid(column = 0, row = 7)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "BASE SIZE\nGAIN PERCENTAGE:").grid(column=0, row=6)
+            self.sbx_cell_base_size_gain = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 2.6), width = 12)
+            self.sbx_cell_base_size_gain.grid(column = 0, row = 7)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "AROUND SIZE\nGAIN PERCENTAGE:").grid(column=0, row=8)
-        self.sbx_cell_around_size_gain = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 0), width = 12)
-        self.sbx_cell_around_size_gain.grid(column = 0, row = 9)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "AROUND SIZE\nGAIN PERCENTAGE:").grid(column=0, row=8)
+            self.sbx_cell_around_size_gain = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 0), width = 12)
+            self.sbx_cell_around_size_gain.grid(column = 0, row = 9)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "SIZE EAT\nPERCENTAGE:").grid(column=1, row=0)
-        self.sbx_cell_size_eat_percentage = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 33.3), width = 12)
-        self.sbx_cell_size_eat_percentage.grid(column = 1, row = 1)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "SIZE EAT\nPERCENTAGE:").grid(column=1, row=0)
+            self.sbx_cell_size_eat_percentage = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 33.3), width = 12)
+            self.sbx_cell_size_eat_percentage.grid(column = 1, row = 1)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "SHARE MUTATION\nCHANGE PERCENTAGE:").grid(column=1, row=2)
-        self.sbx_cell_share_mut_amount = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 20), width = 12)
-        self.sbx_cell_share_mut_amount.grid(column = 1, row =3)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "SHARE MUTATION\nCHANGE PERCENTAGE:").grid(column=1, row=2)
+            self.sbx_cell_share_mut_amount = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 20), width = 12)
+            self.sbx_cell_share_mut_amount.grid(column = 1, row =3)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MIN SHARE\nPERCENTAGE:").grid(column=1, row=4)
-        self.sbx_cell_min_share_per = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 0), width = 12)
-        self.sbx_cell_min_share_per.grid(column = 1, row = 5)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MIN SHARE\nPERCENTAGE:").grid(column=1, row=4)
+            self.sbx_cell_min_share_per = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 0), width = 12)
+            self.sbx_cell_min_share_per.grid(column = 1, row = 5)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MAX SHARE\nPERCENTAGE:").grid(column=1, row=6)
-        self.sbx_cell_max_share_per = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 99), width = 12)
-        self.sbx_cell_max_share_per.grid(column = 1, row = 7)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MAX SHARE\nPERCENTAGE:").grid(column=1, row=6)
+            self.sbx_cell_max_share_per = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 99), width = 12)
+            self.sbx_cell_max_share_per.grid(column = 1, row = 7)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MOVE ENERGY\nCOST PERCENTAGE:").grid(column=1, row=8)
-        self.sbx_cell_move_cost = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 2), width = 12)
-        self.sbx_cell_move_cost.grid(column = 1, row = 9)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MOVE ENERGY\nCOST PERCENTAGE:").grid(column=1, row=8)
+            self.sbx_cell_move_cost = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 2), width = 12)
+            self.sbx_cell_move_cost.grid(column = 1, row = 9)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "DIVIDE MUTATION\nCHANGE PERCENTAGE:").grid(column=2, row=0)
-        self.sbx_cell_div_mut_amount = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 20), width = 12)
-        self.sbx_cell_div_mut_amount.grid(column = 2, row = 1)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "DIVIDE MUTATION\nCHANGE PERCENTAGE:").grid(column=2, row=0)
+            self.sbx_cell_div_mut_amount = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 20), width = 12)
+            self.sbx_cell_div_mut_amount.grid(column = 2, row = 1)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MIN RESOURCES\nPERCENTAGE:").grid(column=2, row=2)
-        self.sbx_cell_min_res_per = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 20), width = 12)
-        self.sbx_cell_min_res_per.grid(column = 2, row = 3)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MIN RESOURCES\nPERCENTAGE:").grid(column=2, row=2)
+            self.sbx_cell_min_res_per = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 20), width = 12)
+            self.sbx_cell_min_res_per.grid(column = 2, row = 3)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MAX RESOURCES\nPERCENTAGE:").grid(column=2, row=4)
-        self.sbx_cell_max_res_per = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 80), width = 12)
-        self.sbx_cell_max_res_per.grid(column = 2, row = 5)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MAX RESOURCES\nPERCENTAGE:").grid(column=2, row=4)
+            self.sbx_cell_max_res_per = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 80), width = 12)
+            self.sbx_cell_max_res_per.grid(column = 2, row = 5)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MUTATION CHANCE\nPERCENTAGE:").grid(column=2, row=6)
-        self.sbx_cell_mut_chance = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 5), width = 12)
-        self.sbx_cell_mut_chance.grid(column = 2, row = 7)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MUTATION CHANCE\nPERCENTAGE:").grid(column=2, row=6)
+            self.sbx_cell_mut_chance = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 5), width = 12)
+            self.sbx_cell_mut_chance.grid(column = 2, row = 7)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "STRONG MUTATION\nCHANCE PERCENTAGE:").grid(column=2, row=8)
-        self.sbx_cell_str_mut_chance = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 45), width = 12)
-        self.sbx_cell_str_mut_chance.grid(column = 2, row = 9)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "STRONG MUTATION\nCHANCE PERCENTAGE:").grid(column=2, row=8)
+            self.sbx_cell_str_mut_chance = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 45), width = 12)
+            self.sbx_cell_str_mut_chance.grid(column = 2, row = 9)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "DIVIDE ENERGY\nCOST PERCENTAGE:").grid(column=3, row=0)
-        self.sbx_cell_div_cost = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 10), width = 12)
-        self.sbx_cell_div_cost.grid(column = 3, row = 1)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "DIVIDE ENERGY\nCOST PERCENTAGE:").grid(column=3, row=0)
+            self.sbx_cell_div_cost = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 10), width = 12)
+            self.sbx_cell_div_cost.grid(column = 3, row = 1)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "CON SIZE MUTATION\nCHANGE PERCENTAGE:").grid(column=3, row=2)
-        self.sbx_cell_size_con_mut_am = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 10), width = 12)
-        self.sbx_cell_size_con_mut_am.grid(column = 3, row = 3)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "CON SIZE MUTATION\nCHANGE PERCENTAGE:").grid(column=3, row=2)
+            self.sbx_cell_size_con_mut_am = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 10), width = 12)
+            self.sbx_cell_size_con_mut_am.grid(column = 3, row = 3)
 
-        tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "CON EN MUTATION\nCHANGE PERCENTAGE:").grid(column=3, row=4)
-        self.sbx_cell_en_con_mut_am = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 5), width = 12)
-        self.sbx_cell_en_con_mut_am.grid(column = 3, row = 5)
+            tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "CON EN MUTATION\nCHANGE PERCENTAGE:").grid(column=3, row=4)
+            self.sbx_cell_en_con_mut_am = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 5), width = 12)
+            self.sbx_cell_en_con_mut_am.grid(column = 3, row = 5)
 
-        self.frm_cell_information = tk.Frame(master = self, relief = tk.RAISED, borderwidth = 1)
-        self.frm_cell_information.columnconfigure([0, 1], weight = 1, minsize = 260)
-        self.frm_cell_information.rowconfigure([i for i in range(18)], weight = 1, minsize = 13.888)
-        self.frm_cell_information.grid(column = 11, row = 4, columnspan = 6, rowspan = 6, sticky = "news")
+        def setup_cell_information():
+            self.frm_cell_information = tk.Frame(master = self, relief = tk.RAISED, borderwidth = 1)
+            self.frm_cell_information.columnconfigure([0, 1], weight = 1, minsize = 260)
+            self.frm_cell_information.rowconfigure([i for i in range(18)], weight = 1, minsize = 13.888)
+            self.frm_cell_information.grid(column = 11, row = 4, columnspan = 6, rowspan = 6, sticky = "news")
 
-        self.lbl_cursor_cell_head = tk.Label(master=self.frm_cell_information, text="Cursor cell:", anchor="w", height=1, bg="red")
-        self.lbl_cursor_cell_head.grid(column=0, row=0, sticky="news")
-        self.lbl_marked_cell_head = tk.Label(master=self.frm_cell_information, text="Marked cell:", anchor="w", height=1, bg="red")
-        self.lbl_marked_cell_head.grid(column=1, row=0, sticky="news")
+            self.lbl_cursor_cell_head = tk.Label(master=self.frm_cell_information, text="Cursor cell:", anchor="w", height=1, bg="red")
+            self.lbl_cursor_cell_head.grid(column=0, row=0, sticky="news")
+            self.lbl_marked_cell_head = tk.Label(master=self.frm_cell_information, text="Marked cell:", anchor="w", height=1, bg="red")
+            self.lbl_marked_cell_head.grid(column=1, row=0, sticky="news")
 
-        self.lbl_cursor_cell = [None for _ in range(17)]
-        self.lbl_marked_cell = [None for _ in range(17)]
+            self.lbl_cursor_cell = [None for _ in range(17)]
+            self.lbl_marked_cell = [None for _ in range(17)]
 
-        for i in range(len(self.lbl_cursor_cell)):
-            self.lbl_cursor_cell[i] = tk.Label(master=self.frm_cell_information, bg="green", anchor="w", height=1)
-            self.lbl_cursor_cell[i].grid(column=0, row=1+i, sticky="nswe")
-            self.lbl_marked_cell[i] = tk.Label(master=self.frm_cell_information, bg="green", anchor="w", height=1)
-            self.lbl_marked_cell[i].grid(column=1, row=1+i, sticky="nswe")
+            for i in range(len(self.lbl_cursor_cell)):
+                self.lbl_cursor_cell[i] = tk.Label(master=self.frm_cell_information, bg="green", anchor="w", height=1)
+                self.lbl_cursor_cell[i].grid(column=0, row=1+i, sticky="nswe")
+                self.lbl_marked_cell[i] = tk.Label(master=self.frm_cell_information, bg="green", anchor="w", height=1)
+                self.lbl_marked_cell[i].grid(column=1, row=1+i, sticky="nswe")
+
+        def setup_advanced_statistics():
+            self.frm_advanced_statistics = tk.Frame(master = self, relief = tk.RAISED, borderwidth = 1)
+            self.frm_advanced_statistics.columnconfigure([0], weight = 1, minsize = 60)
+            self.frm_advanced_statistics.columnconfigure([i for i in range(1, 21)], weight = 1, minsize = 23)
+            self.frm_advanced_statistics.rowconfigure([i for i in range(12)], weight = 1, minsize = 18)
+            self.frm_advanced_statistics.rowconfigure([18], weight = 1, minsize = 34)
+
+            texts = ["MIDAGE",  "MEDAGE", "MAXAGE", "MAXCLUS", "MIDCLS", "CELLEAT"]
+            self.lbl_statistics = [[None for _ in range(20)] for _ in range(18)]
+
+            for stat in range(6):
+                tk.Label(master=self.frm_advanced_statistics, text=texts[stat], anchor="w", height=1).grid(column=0, row=stat * 2)
+                for sub_row in range(2):
+                    for col in range(20):
+                        self.lbl_statistics[stat][stat * 2 + sub_row] = (tk.Label(master=self.frm_advanced_statistics, text="0", anchor="w", height=1))
+                        self.lbl_statistics[stat][stat * 2 + sub_row].grid(column=1 + col, row=stat * 2 + sub_row)
+            
+            for btn in range(7):
+                ...
+
+
+        setup_experiments()
+        setup_hexgrid()
+        setup_simulation_run()
+        setup_interactive_buttons()
+        setup_initial_settings()
+        setup_basic_settings()
+        setup_advanced_settings()
+        setup_advanced_statistics()
+        setup_cell_information()
+
+        self.lower_frame_list = [self.frm_cell_information, self.frm_simulation_settings, self.frm_advanced_sim_settigs, self.frm_advanced_statistics]
+        self.switch_button_text_list = ["CELL STATS", "SETTINGS", "ADVANCED\nSETTINGS", "STATISTICS"]
 
     def load_images(self):
         """Helper function, loads images from file to application."""
@@ -1847,6 +1896,13 @@ class Laboratory(tk.Tk):
     def switch_settings_cell_info(self):
         """Button function, switches between cell information interface, basic settings interface
         and advanced settings interface according to currently shown interface."""
+        last_type = self.lower_frame_type
+        self.lower_frame_type = (self.lower_frame_type + 1) % len(self.lower_frame_list)
+        self.lower_frame_list[self.lower_frame_type].grid(column = 11, row = 4, columnspan = 6, rowspan = 6, sticky = "news")
+        self.lower_frame_list[last_type].grid_forget()
+        self.btn_switch_settings_cell_info.config(text = self.switch_button_text_list[self.lower_frame_type])
+
+        return
         if self.lower_frame_type == 0:
             self.lower_frame_type = 1
             self.btn_switch_settings_cell_info.config(text = "ADVANCED\nSETTINGS")
