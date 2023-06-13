@@ -1703,6 +1703,8 @@ class Laboratory(tk.Tk):
             for btn in range(7):
                 self.btn_stat_ages[btn] = tk.Button(master=self.frm_advanced_statistics, text="LENGTH " + str(self.stat_ages[btn]), command=lambda x=btn: self.switch_stat_age(x), height=1, width=8)
                 self.btn_stat_ages[btn].grid(column=btn * 2, row=14, columnspan=2)
+            
+            self.btn_stat_ages[0].configure(bg="red")
 
         setup_experiments()
         setup_hexgrid()
@@ -1892,6 +1894,10 @@ class Laboratory(tk.Tk):
 
     def switch_stat_age(self, age_type):
         self.selected_stat_age = self.stat_ages[age_type]
+        self.btn_stat_ages[age_type].configure(bg="red")
+        for index in range(len(self.btn_stat_ages)):
+            if index != age_type:
+                self.btn_stat_ages[index].configure(bg="white")
         self.show_advanced_statistics()
 
     def switch_to_experiment(self, experiment_number:int):
