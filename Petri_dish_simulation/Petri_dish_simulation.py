@@ -9,6 +9,7 @@ from random import randint, shuffle, uniform
 from math import pow, log10, floor
 from statistics import median, mean
 from itertools import count
+from collections import deque
 
 ENERGY_UNIT_CONST = 1000
 MAX_CELL_SIZE_CONST = 1000
@@ -1043,6 +1044,7 @@ class Dish_Experiment():
     experiment_created = False
     simulating = False
 
+    cell_stats_amount = 7
     simulation_steps_duration = 0
     number_of_cells = 0
     cell_mid_age = 0
@@ -1053,6 +1055,12 @@ class Dish_Experiment():
     max_cluster_size = 0
     mid_cluster_size = 0
     cells_eaten = 0
+
+    stat_ages = (1, 2, 5, 10, 20, 40, 80)
+    age_length = 28
+    # nejpreve typ statistiky, poté délka sbírání dat
+    saved_statistics = list[list[deque[int]]]
+    current_statistics = list[int]
 
     last_update_time = float
 
@@ -1072,6 +1080,8 @@ class Dish_Experiment():
         self.experiment_number = experiment_number
         self.time_step = time_step
         self.cell_with_maxage = None
+        self.current_statistics = [0] * self.cell_stats_amount
+        self.saved_statistics = [[deque() for _ in range(len(self.stat_ages))] for _ in range(self.cell_stats_amount)]
         self.cell_actions = [Action_Still(self.cell_and_state_settings), Action_Move(self.cell_and_state_settings), Action_Divide(self.cell_and_state_settings), Action_Energy_Share(self.cell_and_state_settings)]
         self.cell_conditions = [Condition_Energy(self.cell_and_state_settings, 0, False), Condition_Size(self.cell_and_state_settings, 0, False), Condition_Sensor(self.cell_and_state_settings, 0, 0)]
 
@@ -1132,6 +1142,8 @@ class Dish_Experiment():
         self.real_grid = None
         self.simulation_steps_duration = 0
         self.cells_eaten = 0
+        self.saved_statistics = [[deque() for _ in range(len(self.stat_ages))] for _ in range(self.cell_stats_amount)]
+        self.current_statistics = [0] * self.cell_stats_amount
 
     def decimate_culture(self, percentage:int):
         """Kills given percentage of cells in experiment randomly."""
@@ -1203,8 +1215,12 @@ class Dish_Experiment():
         """Calculates fast-obtainable experiment statistics - everything but cluster sizes."""
         if self.number_of_cells == 0:
             self.cell_mid_age = 0
+            self.current_statistics[1] = self.cell_mid_age
             self.cell_med_age = 0
+            self.current_statistics[2] = self.cell_med_age
             self.cell_max_age = 0
+            self.current_statistics[3] = self.cell_max_age
+            self.save_statistics([1, 2, 3])
             return
         self.cell_sum_age = 0
         self.cell_max_age = 0
@@ -1216,9 +1232,41 @@ class Dish_Experiment():
                 if cell.age_in_steps > self.cell_max_age:
                     self.cell_max_age = cell.age_in_steps
                     self.cell_with_maxage = cell
+        self.current_statistics[3] = self.cell_max_age
         self.cell_med_age = median(ages)
+        self.current_statistics[2] = self.cell_med_age
         self.cell_mid_age = round(self.cell_sum_age / self.number_of_cells, 2)
+        self.current_statistics[1] = self.cell_mid_age
+        self.save_statistics([1, 2, 3])
         
+    def save_statistics(self, types:list[int]):
+        if self.simulation_steps_duration != 0:
+            for a_type in range(len(self.stat_ages)):
+                if self.simulation_steps_duration % self.stat_ages[a_type] == 0:
+                    for s_type in types:
+                        queue = self.saved_statistics[s_type][a_type]
+                        if self.stat_ages[a_type] == 1:
+                            queue.appendleft(self.current_statistics[s_type])
+                            if len(queue) > 28:
+                                queue.pop()
+                        elif self.stat_ages[a_type] == 5:
+                            age_1_queue = self.saved_statistics[s_type][0].copy()
+                            age_1_stats = [age_1_queue.popleft() for _ in range(5)]
+                            age_1_average = round(mean(age_1_stats), 2)
+                            queue.appendleft(age_1_average)
+                            if len(queue) > 28:
+                                queue.pop()
+                        else:
+                            preage_queue = self.saved_statistics[s_type][a_type - 1].copy()
+                            preage_stats = [preage_queue.popleft() for _ in range(2)] # 2 - protože následující věk je 2 krát delší
+                            preage_average = round(mean(preage_stats), 2)
+                            queue.appendleft(preage_average)
+                            if len(queue) > 28:
+                                queue.pop()
+
+    def get_saved_statistics(self, s_type:int, age:int):
+        age_type = self.stat_ages.index(age)
+        return self.saved_statistics[s_type][age_type].copy()
 
     def slow_global_statistics(self):
         """Calculates slow-obtainable experiment statistics - cluster sizes."""
@@ -1229,7 +1277,10 @@ class Dish_Experiment():
         else:
             self.max_cluster_size = 0
             self.mid_cluster_size = 0
-    
+        self.current_statistics[4] = self.max_cluster_size
+        self.current_statistics[5] = self.mid_cluster_size
+        self.save_statistics([4, 5])
+
     # zahaji simulaci
     def start_simulation(self):
         """Sarts simulation if it is created."""
@@ -1250,6 +1301,8 @@ class Dish_Experiment():
             self.simulation_steps_duration += 1
             self.simulation_update()
             self.number_of_cells = len(self.real_grid.cells_in_grid)
+            self.current_statistics[0] = self.number_of_cells
+            self.save_statistics([0])
             return True
         return False
 
@@ -1259,6 +1312,8 @@ class Dish_Experiment():
         for cell in cell_updates:
             cell.step(self.virtual_grid, self.real_grid)
         self.cells_eaten = self.real_grid.cell_eating(self.real_grid)
+        self.current_statistics[6] = self.cells_eaten
+        self.save_statistics([6])
         self.real_grid.refill_energy(self.refill_tile_percentage, round(self.refill_energy_flow * ENERGY_UNIT_CONST))
         self.real_grid.copy_changes_to_and_reset(self.virtual_grid)
 
@@ -1335,6 +1390,7 @@ class Laboratory(tk.Tk):
     btn_switch_paste_kill = tk.Button
     btn_copy_cell = tk.Button
     btn_stat_ages = list[tk.Button]
+    selected_stat_age = int
     stat_ages = (1, 2, 5, 10, 20, 40, 80)
 
     lbl_cell_counts = list[tk.Label]
@@ -1372,6 +1428,7 @@ class Laboratory(tk.Tk):
         self.cursor_cell = None
         self.copied_cell = None
         self.last_im_update_coords = [0, 0]
+        self.selected_stat_age = 1
 
         self.create_interface()
 
@@ -1530,7 +1587,7 @@ class Laboratory(tk.Tk):
         def setup_advanced_settings():
             self.frm_advanced_sim_settigs = tk.Frame(master = self, relief = tk.RAISED, borderwidth = 1)
             self.frm_advanced_sim_settigs.columnconfigure([0, 1, 2, 3], weight = 1, minsize = 130)
-            self.frm_advanced_sim_settigs.rowconfigure([i for i in range(10)], weight = 1, minsize = 25)
+            self.frm_advanced_sim_settigs.rowconfigure([i for i in range(10)], weight = 1, minsize = 24.5)
 
             tk.Label(master = self.frm_advanced_sim_settigs, height = 3, width = 17, text = "MAX ENERGY\nBASE PERCENTAGE:").grid(column=0, row=0)
             self.sbx_cell_max_en_base = tk.Spinbox(master = self.frm_advanced_sim_settigs, from_ = 0, to = 100, increment = 0.1, textvariable = tk.DoubleVar(value = 60), width = 12)
@@ -1627,23 +1684,25 @@ class Laboratory(tk.Tk):
         def setup_advanced_statistics():
             self.frm_advanced_statistics = tk.Frame(master = self, relief = tk.RAISED, borderwidth = 1)
             self.frm_advanced_statistics.columnconfigure([0], weight = 1, minsize = 60)
-            self.frm_advanced_statistics.columnconfigure([i for i in range(1, 21)], weight = 1, minsize = 23)
-            self.frm_advanced_statistics.rowconfigure([i for i in range(12)], weight = 1, minsize = 18)
-            self.frm_advanced_statistics.rowconfigure([18], weight = 1, minsize = 34)
+            self.frm_advanced_statistics.columnconfigure([i for i in range(1, 15)], weight = 1, minsize = 31)
+            self.frm_advanced_statistics.rowconfigure([i for i in range(14)], weight = 1, minsize = 25)
+            self.frm_advanced_statistics.rowconfigure([14], weight = 1, minsize = 30)
 
-            texts = ["MIDAGE",  "MEDAGE", "MAXAGE", "MAXCLUS", "MIDCLS", "CELLEAT"]
-            self.lbl_statistics = [[None for _ in range(20)] for _ in range(18)]
+            texts = ["CELL #", "MIDAGE",  "MEDAGE", "MAXAGE", "MAXCLUS", "MIDCLUS", "CELLEAT"]
+            self.lbl_statistics = [[None for _ in range(28)] for _ in range(7)]
 
-            for stat in range(6):
-                tk.Label(master=self.frm_advanced_statistics, text=texts[stat], anchor="w", height=1).grid(column=0, row=stat * 2)
+            for stat in range(7):
+                tk.Label(master=self.frm_advanced_statistics, text=texts[stat], anchor="w", height=1, width=8).grid(column=0, row=stat * 2)
                 for sub_row in range(2):
-                    for col in range(20):
-                        self.lbl_statistics[stat][stat * 2 + sub_row] = (tk.Label(master=self.frm_advanced_statistics, text="0", anchor="w", height=1))
-                        self.lbl_statistics[stat][stat * 2 + sub_row].grid(column=1 + col, row=stat * 2 + sub_row)
-            
-            for btn in range(7):
-                ...
+                    for col in range(14):
+                        self.lbl_statistics[stat][col + sub_row * 14] = (tk.Label(master=self.frm_advanced_statistics, text="0", anchor="w", width=4, relief=tk.RAISED, font=("Arial", 8)))
+                        self.lbl_statistics[stat][col + sub_row * 14].grid(column=1 + col, row=stat * 2 + sub_row, sticky="nswe")
 
+            self.btn_stat_ages = [None] * 7
+
+            for btn in range(7):
+                self.btn_stat_ages[btn] = tk.Button(master=self.frm_advanced_statistics, text="LENGTH " + str(self.stat_ages[btn]), command=lambda x=btn: self.switch_stat_age(x), height=1, width=8)
+                self.btn_stat_ages[btn].grid(column=btn * 2, row=14, columnspan=2)
 
         setup_experiments()
         setup_hexgrid()
@@ -1707,6 +1766,7 @@ class Laboratory(tk.Tk):
         exp.fast_global_statistics()
         exp.slow_global_statistics()
         self.show_statistics()
+        self.show_advanced_statistics()
 
     def create_experiment_canvas(self, experiment:Dish_Experiment):
         """Creates new canvas in interface for experiment."""
@@ -1830,6 +1890,10 @@ class Laboratory(tk.Tk):
             self.pasting = True
             self.btn_switch_paste_kill.config(text = "MODE:\nPASTE")
 
+    def switch_stat_age(self, age_type):
+        self.selected_stat_age = self.stat_ages[age_type]
+        self.show_advanced_statistics()
+
     def switch_to_experiment(self, experiment_number:int):
         """Button function, switches shown experiment to an experiment with given index
         and adjust all experiment settings sliders, spinboxes, ... accordingly."""
@@ -1898,26 +1962,12 @@ class Laboratory(tk.Tk):
         and advanced settings interface according to currently shown interface."""
         last_type = self.lower_frame_type
         self.lower_frame_type = (self.lower_frame_type + 1) % len(self.lower_frame_list)
+        next_type = (self.lower_frame_type + 1) % len(self.lower_frame_list)
         self.lower_frame_list[self.lower_frame_type].grid(column = 11, row = 4, columnspan = 6, rowspan = 6, sticky = "news")
         self.lower_frame_list[last_type].grid_forget()
-        self.btn_switch_settings_cell_info.config(text = self.switch_button_text_list[self.lower_frame_type])
-
-        return
-        if self.lower_frame_type == 0:
-            self.lower_frame_type = 1
-            self.btn_switch_settings_cell_info.config(text = "ADVANCED\nSETTINGS")
-            self.frm_simulation_settings.grid(column = 11, row = 4, columnspan = 6, rowspan = 6, sticky = "news")
-            self.frm_cell_information.grid_forget()
-        elif self.lower_frame_type == 1:
-            self.lower_frame_type = 2
-            self.btn_switch_settings_cell_info.config(text = "CELL STATS")
-            self.frm_advanced_sim_settigs.grid(column = 11, row = 4, columnspan = 6, rowspan = 6, sticky = "news")
-            self.frm_simulation_settings.grid_forget()
-        else:
-            self.lower_frame_type = 0
-            self.btn_switch_settings_cell_info.config(text = "SETTINGS")
-            self.frm_cell_information.grid(column = 11, row = 4, columnspan = 6, rowspan = 6, sticky = "news")
-            self.frm_advanced_sim_settigs.grid_forget()
+        self.btn_switch_settings_cell_info.config(text = self.switch_button_text_list[next_type])
+        if self.lower_frame_type == 3:
+            self.show_advanced_statistics()
 
     def pixel_to_hex_position(self, pixel_position:tuple) -> Hex_Pos:
         """Returns hex position given by pixel position in the window (from left and from top) and by shown experiment."""
@@ -2091,14 +2141,43 @@ class Laboratory(tk.Tk):
     def show_statistics(self):
         """Sets text values of labels in statistics interface according to the shown experiment."""
         curr_exp = self.dish_experiments[self.current_experiment]
-        self.lbl_mid_age.config(text="MIDAGE: " + str(curr_exp.cell_mid_age))
-        self.lbl_med_age.config(text="MEDAGE: " + str(curr_exp.cell_med_age))
-        self.lbl_max_age.config(text="MAXAGE: " + str(curr_exp.cell_max_age))
-        self.lbl_max_cluster.config(text="MAXCLUS: " + str(curr_exp.max_cluster_size))
-        self.lbl_mid_cluster.config(text="MIDCLUS: " + str(curr_exp.mid_cluster_size))
-        self.maxage_cell = curr_exp.cell_with_maxage
-        self.lbl_cells_eaten.config(text="CELLEAT: " + str(curr_exp.cells_eaten))
-        self.lbl_simulation_duration.config(text="DURATION: " + str(curr_exp.simulation_steps_duration))
+        if curr_exp is not None:
+            self.lbl_mid_age.config(text="MIDAGE: " + str(curr_exp.cell_mid_age))
+            self.lbl_med_age.config(text="MEDAGE: " + str(curr_exp.cell_med_age))
+            self.lbl_max_age.config(text="MAXAGE: " + str(curr_exp.cell_max_age))
+            self.lbl_max_cluster.config(text="MAXCLUS: " + str(curr_exp.max_cluster_size))
+            self.lbl_mid_cluster.config(text="MIDCLUS: " + str(curr_exp.mid_cluster_size))
+            self.maxage_cell = curr_exp.cell_with_maxage
+            self.lbl_cells_eaten.config(text="CELLEAT: " + str(curr_exp.cells_eaten))
+            self.lbl_simulation_duration.config(text="DURATION: " + str(curr_exp.simulation_steps_duration))
+
+    def show_advanced_statistics(self):
+        """Sets text values of labels in advanced statistics interface according to the shown experiment."""
+        curr_exp = self.dish_experiments[self.current_experiment]
+        if curr_exp is not None:
+            for stat_type in range(7):
+                queue = curr_exp.get_saved_statistics(stat_type, self.selected_stat_age)
+                old_lbl = None
+                old_val = 0
+                labels = self.lbl_statistics[stat_type]
+                for index in range(len(labels)):
+                    lbl = labels[index]
+                    val = 0
+                    if len(queue) > 0:
+                        val = queue.popleft()
+                        lbl.configure(text=str(val))
+                    else:
+                        lbl.configure(text=str(val))
+                    if old_lbl is not None:
+                        if old_val > val:
+                            old_lbl.configure(bg="lightgreen")
+                        elif old_val < val:
+                            old_lbl.configure(bg="pink")
+                        else:
+                            old_lbl.configure(bg="white")
+                    old_val = val
+                    old_lbl = lbl
+
 
     def show_cell_counts(self):
         """Sets text values of labels under the buttons in choose experiment interface according to the shown experiment."""
@@ -2120,8 +2199,8 @@ class Laboratory(tk.Tk):
                 self.btn_play_pause_experiment.config(text="PAUSE")
             else:
                 self.btn_play_pause_experiment.config(text="PLAY")
-                experiment.slow_global_statistics()
                 self.show_statistics()
+                self.show_advanced_statistics()
         else:
             self.btn_play_pause_experiment.config(text="PAUSE")
 
@@ -2151,8 +2230,6 @@ class Laboratory(tk.Tk):
 
     def start_laboratory(self):
         """Starts laboratory."""
-        self.stat_delay = 1
-        self.sim_turns = 0
 
         if not self.laboratory_running:
             self.laboratory_running = True
@@ -2170,12 +2247,11 @@ class Laboratory(tk.Tk):
             if dish.simulate():
                 self.show_cell_counts()
                 if self.dish_experiments[self.current_experiment] == dish:
-                    self.sim_turns += 1
-                    if self.sim_turns == self.stat_delay:
-                        dish.slow_global_statistics()
-                        self.sim_turns = 0
                     dish.fast_global_statistics()
+                    dish.slow_global_statistics()
                     self.show_statistics()
+                    if self.lower_frame_type == 3:
+                        self.show_advanced_statistics()
                     self.show_marked_cell()
         self.update_canvas()
         self.after(self.cycle_time_ms, self.cycle_laboratory)
