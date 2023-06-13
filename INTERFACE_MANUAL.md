@@ -49,7 +49,7 @@ Pod panelem **Experimenty** je tlačítko **`SETTINGS`**, které slouží k pře
 * **`ADVANCED SETTINGS`** Po stisknutí se pravý dolní panel změní na **Pokročilé nastavení** a tlačítko se změní na **`CELL STATS`**.
 * **`CELL STATS`** Po stisknutí se pravý dolní panel změní na **Informace o buňkách** a tlačítko se změní na **`SETTINGS`**.
 
-## Informace o buňkách / Základní nastavení / Pokročilé nastavení
+## Informace o buňkách / Základní nastavení / Pokročilé nastavení / Pokročilé statistiky
 Pravá dolní část okna je vymezena pro tři části rozhraní. Mezi těmito částmi se přepíná pomocí tlačítka nad levým horním rohem panelu.
 
 ### Informace o buňkách
@@ -102,6 +102,9 @@ Panel obsahuje 18 polí s hodnotami, které slouží ke složitějším úpravá
 * **`DIVIDE ENERGY COST PERCENTAGE`** Hodnota v poli udává, kolik energie stojí akce *buněčné dělení*. Tato hodnota se odvíjí od maximální energie políček a hodnota v poli určuje, kolik procent této hodnoty políček stojí akce *buněčné dělení*.
 * **`CON SIZE MUTATION CHANGE PERCENTAGE`** Hodnota v poli udává, o jakou hodnotu se může změnit kontrolní číslo v podmínce *podmínka velikosti*. Tato hodnota se odvíjí od maximální velikosti buňěk a hodnota v poli určuje, kolik procent této hodnoty buněk je nejvyšší možná změna v podmínce.
 * **`CON EN MUTATION CHANGE PERCENTAGE`** Hodnota v poli udává, o jakou hodnotu se může změnit kontrolní číslo v podmínce *podmínka energie*. Tato hodnota se odvíjí od maximální energie políček a hodnota v poli určuje, kolik procent této hodnoty políček je nejvyšší možná změna v podmínce.
+
+### Pokročilé statistiky
+Panel obsahuje 14 řádků a 14 sloupců malých cedulek + 1 sloupec cedulek vlevo + 1 řádek tlačítek dole. Řádky malých cedulek na pozici i a i+1 odpovídají i-té cedulce v prvním sloupci s textem a ukazují časový vývoj dané statistiky. Cedulky vlevo mají stejný význam, jako v **Statistiky, rychlost simulace**, přičemž **`CELL #`** znamená počet buněk. Tlačítka dole udávají, z jakého rozsahu cyklů je vypočítána statistika v malých cedulkách. Ta je vypočítána jako aritmetický průměr z x cyklů, kde x je číslo na zvolemném tlačítku v posledním řádku. Zvolené tlačítko je vybarveno červeně.
 
 ## Ovládání posuvníků a polí s hodnotami
 Hodnotu posuvníku lze měnit buďto kliknutím nad nebo pod držadlo (pro preciznější změnu), nebo posouváním držadla se stisknutým levým tlačítkem myši. Hodnotu pole s hodnotou lze měnit buďto kliknutím na šipky na pravém okraji pole, nebo přímým zadáním hodnoty do pole.
